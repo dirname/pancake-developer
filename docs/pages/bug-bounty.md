@@ -1,29 +1,28 @@
 # Bug Bounty
 
-The PancakeSwap bug bounty program is focused around our smart contracts, websites, and apps with a primary interest in the prevention of loss of user funds, either by direct draining of locked funds or social engineering attacks by redirecting users or forcing them to sign a transaction.
+PancakeSwap 的漏洞悬赏计划主要关注我们的智能合约、网站和应用程序，重点在于防止用户资金的损失，无论是通过直接耗尽锁定资金，还是通过社交工程攻击来重定向用户或强迫他们签署交易。
 
 https://immunefi.com/bounty/pancakeswap
 
-**Smart Contracts and Blockchain**\*
+**智能合约和区块链**\*
 
-| Level |  |
+| 级别 |  |
 | :--- | :--- |
-| Critical | up to USD $1,000,000 |
-| High | USD $40,000 |
-| Medium | USD $5,000 |
-| Low | USD $1,000 |
+| 严重 | 最高 USD $1,000,000 |
+| 高 | USD $40,000 |
+| 中 | USD $5,000 |
+| 低 | USD $1,000 |
 
-\*All bug reports must include a Proof of Concept demonstrating how the vulnerability can be exploited to be eligible for a reward. This may be a smart contract itself or a transaction.
+\*所有的漏洞报告必须包含概念验证，演示漏洞是如何被利用的以符合奖励资格。这可以是一个智能合约本身或一笔交易。
 
-**Website and Apps**
+**网站和应用**
 
-| Level |  |
+| 级别 |  |
 | :--- | :--- |
-| Critical\* | USD $7,500 |
-| High | USD $4,000 |
-| Medium | USD $1,500 |
+| 严重\* | USD $7,500 |
+| 高 | USD $4,000 |
+| 中 | USD $1,500 |
 
-\*XSS reports are restricted to those that have an impact of prompting a user to sign a transaction or a redirect.
+\*XSS 报告仅限于那些导致用户签署交易或重定向的影响。
 
-All payouts are done by the **PancakeSwap** team and are pegged to the **USD** values set here and are payable in **CAKE** or **BUSD**.
-
+所有的奖励都由 **PancakeSwap** 团队支付，并与这里设定的 **USD** 价值挂钩，可以用 **CAKE** 或 **BUSD** 支付。

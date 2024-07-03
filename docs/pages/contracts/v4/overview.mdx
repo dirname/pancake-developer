@@ -1,24 +1,23 @@
 import { Callout } from 'vocs/components'
 
-# Overview
+# 概述
 
-This is PancakeSwap v4 development documentation. 
+这是 PancakeSwap v4 的开发文档。
 
 <Callout type="info">
-  PancakeSwap v4 is still in active development 
+  PancakeSwap v4 仍在积极开发中
 </Callout>
 
------ 
+-----
 
-PancakeSwap v3, launched in 2023, introduced the Concentrated Liquidity Automated Market Maker (CLAMM) model from Uniswap. This model allows liquidity providers to offer assets within specific price ranges, enhancing capital efficiency and providing deeper liquidity for traders.
+PancakeSwap v3 于 2023 年推出，引入了 Uniswap 的集中流动性自动做市商 (CLAMM) 模型。该模型允许流动性提供者在特定价格范围内提供资产，提升资金效率，并为交易者提供更深的流动性。
 
-PancakeSwap v4, recognizing the need for adaptability and scalability, separates Accounting logic from AMM logic, implements a three-tiered modular architecture (see image below) that consists of the **[Vault](/contracts/v4/overview/accounting-layer-vault), [Pool Managers](/contracts/v4/overview/amm-layer-poolmanager), and [Hooks](/contracts/v4/overview/custom-layer-hook)**. This allows for easier integration of evolving AMM paradigms without requiring a complete protocol overhaul.
+PancakeSwap v4 认识到适应性和可扩展性的需求，将会计逻辑与 AMM 逻辑分离，实施了三层模块化架构（见下图），由 **[Vault](/contracts/v4/overview/accounting-layer-vault), [Pool Managers](/contracts/v4/overview/amm-layer-poolmanager) 和 [Hooks](/contracts/v4/overview/custom-layer-hook)** 组成。这使得在不需要完全改造协议的情况下，更容易集成不断演变的 AMM 范式。
 
 ![alt text](/v4/architecture.png)
 
-In contrast to v3's limited flexibility, PancakeSwap v4 takes a more open-ended approach, empowering pool creators with greater customization capabilities. The introduction of hooks enables the integration of custom features like bespoke oracles, dynamic fee components, active liquidity management strategies, diverse order types, and more. The non-upgradeable core ensures stability, while each pool can integrate its own hook smart contract at creation. 
+与 v3 的有限灵活性相比，PancakeSwap v4 采用更加开放的方式，赋予池创建者更大的定制能力。hooks 的引入使得集成自定义功能成为可能，例如定制预言机、动态费用组件、主动流动性管理策略、多样化订单类型等。不可升级的核心确保了稳定性，而在创建时每个池都可以集成其自己的 hook 智能合约。
 
-Additionally, each AMM implementation/Pool Type has an independent Singleton implementation, optimizing gas efficiency for new pool deployment and multi-hop transactions.
+此外，每个 AMM 实现或池类型都有独立的 Singleton 实现，优化了新池部署和多跳交易的 gas 效率。
 
-Flash Accounting complements the Singleton contract design by consolidating transaction settlement, computing net balances for a batch of transactions, and settling them collectively, reducing gas consumption.
-
+Flash Accounting 补充了 Singleton 合约设计，通过合并交易结算，计算一批交易的净余额并集体结算，减少 gas 消耗。

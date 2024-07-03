@@ -1,5 +1,5 @@
 ---
-description: Router for stateless execution of swaps against PancakeSwap V2
+description: 无状态执行 PancakeSwap V2 上的交换的路由器
 ---
 
 # V2SwapRouter
@@ -12,44 +12,10 @@ description: Router for stateless execution of swaps against PancakeSwap V2
 function swapExactTokensForTokens(uint256 amountIn, uint256 amountOutMin, address[] path, address to) external payable returns (uint256 amountOut)
 ```
 
-Swaps `amountIn` of one token for as much as possible of another token
+将 `amountIn` 的一种代币换成尽可能多的另一种代币
 
-_Setting `amountIn` to 0 will cause the contract to look up its own balance, and swap the entire amount, enabling contracts to send tokens before calling this function._
+_将 `amountIn` 设置为 0 会使合约查找其自身的余额，并交换全部金额，这使合约可以在调用此函数之前发送代币。_
 
-**Parameters**
+**参数**
 
-| Name         | Type       | Description                                        |
-| ------------ | ---------- | -------------------------------------------------- |
-| amountIn     | uint256    | The amount of token to swap                        |
-| amountOutMin | uint256    | The minimum amount of output that must be received |
-| path         | address\[] | The ordered list of tokens to swap through         |
-| to           | address    | The recipient address                              |
-
-**Return Values**
-
-| Name      | Type    | Description                      |
-| --------- | ------- | -------------------------------- |
-| amountOut | uint256 | The amount of the received token |
-
-### swapTokensForExactTokens
-
-```solidity
-function swapTokensForExactTokens(uint256 amountOut, uint256 amountInMax, address[] path, address to) external payable returns (uint256 amountIn)
-```
-
-Swaps as little as possible of one token for an exact amount of another token
-
-**Parameters**
-
-| Name        | Type       | Description                                          |
-| ----------- | ---------- | ---------------------------------------------------- |
-| amountOut   | uint256    | The amount of token to swap for                      |
-| amountInMax | uint256    | The maximum amount of input that the caller will pay |
-| path        | address\[] | The ordered list of tokens to swap through           |
-| to          | address    | The recipient address                                |
-
-**Return Values**
-
-| Name     | Type    | Description                |
-| -------- | ------- | -------------------------- |
-| amountIn | uint256 | The amount of token to pay |
+|

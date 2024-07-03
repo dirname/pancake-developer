@@ -1,312 +1,312 @@
 # Lottery Contract
 
-## Contract roles:
+## 合约角色：
 
-| Role                           | Description                                                               |
-| ------------------------------ | ------------------------------------------------------------------------- |
-| injectorAddress (onlyInjector) | Injector is the address used to fund the lottery with periodic injections |
-| operatorAddress (onlyOperator) | The lottery scheduler account used to run regular operations.             |
-| treasuryAddress (onlyTreasury) | The address in which the burn is sent                                     |
-| Owner (onlyOwner)              | The contract owner                                                        |
+| 角色                           | 描述                                         |
+| ------------------------------ | ------------------------------------------- |
+| injectorAddress (onlyInjector) | Injector 是用于定期注资彩票的地址                 |
+| operatorAddress (onlyOperator) | 用于运行常规操作的彩票调度账户                    |
+| treasuryAddress (onlyTreasury) | 接收销毁资产的地址                             |
+| Owner (onlyOwner)              | 合约拥有者                                    |
 
 ### Owner
 
 `0xad9d97fc7bf0ac6dc68d478dcb3709454519b358`
 
-Address controlled by gnosis multisignature contract with a threshold of 3/6
+由 gnosis 多重签名合约控制，阈值为 3/6
 
 ### Operator Address
 
 `0x566a7e38b300E903dE71389C2b801AcDBA5268dB`
 
-Scheduler address - entirely automated and no human interaction. Not on multisig and doesn't have access to sensitive contract operations.
+调度地址 - 全自动化且无人参与。不在多重签名范围内，没有访问敏感合约操作的权限。
 
 ### Treasury Address
 
 `0xe2086f890e7bd20e07fc0036a437dc4813e88b09`
 
-Address controlled by gnosis multisignature contract with a threshold of 3/6
+由 gnosis 多重签名合约控制，阈值为 3/6
 
-### Injector Address (Currently the same as Owner)
+### Injector Address （目前与 Owner 相同）
 
 `0xaD9d97fc7BF0ac6dC68d478dcB3709454519b358`
 
-Address controlled by gnosis multisignature contract with a threshold of 3/6
+由 gnosis 多重签名合约控制，阈值为 3/6
 
-## Functions
+## 函数
 
-### `injectFunds` - **Injector** and **Owner**
+### `injectFunds` - **Injector** 和 **Owner**
 
 ```typescript
-    function injectFunds(uint256 _lotteryId, uint256 _amount) external override onlyOwnerOrInjector {
-        require(_lotteries[_lotteryId].status == Status.Open, "Lottery not open");
+function injectFunds(uint256 _lotteryId, uint256 _amount) external override onlyOwnerOrInjector {
+    require(_lotteries[_lotteryId].status == Status.Open, "Lottery not open");
 
-        cakeToken.safeTransferFrom(address(msg.sender), address(this), _amount);
-        _lotteries[_lotteryId].amountCollectedInCake += _amount;
+    cakeToken.safeTransferFrom(address(msg.sender), address(this), _amount);
+    _lotteries[_lotteryId].amountCollectedInCake += _amount;
 
-        emit LotteryInjection(_lotteryId, _amount);
-    }
+    emit LotteryInjection(_lotteryId, _amount);
+}
 ```
 
-The **Injector** or **Owner** can call this function to inject a specific _lotteryId_ with a specified amount of _CAKE_.
+**Injector** 或 **Owner** 可以调用此函数向指定的 _lotteryId_ 注入特定数量的 _CAKE_。
 
 ### `startLottery` - **Operator**
 
 ```typescript
-    function startLottery(
-        uint256 _endTime,
-        uint256 _priceTicketInCake,
-        uint256 _discountDivisor,
-        uint256[6] calldata _rewardsBreakdown,
-        uint256 _treasuryFee
-    ) external override onlyOperator {
-        require(
-            (currentLotteryId == 0) || (_lotteries[currentLotteryId].status == Status.Claimable),
-            "Not time to start lottery"
-        );
+function startLottery(
+    uint256 _endTime,
+    uint256 _priceTicketInCake,
+    uint256 _discountDivisor,
+    uint256[6] calldata _rewardsBreakdown,
+    uint256 _treasuryFee
+) external override onlyOperator {
+    require(
+        (currentLotteryId == 0) || (_lotteries[currentLotteryId].status == Status.Claimable),
+        "Not time to start lottery"
+    );
 
-        require(
-            ((_endTime - block.timestamp) > MIN_LENGTH_LOTTERY) && ((_endTime - block.timestamp) < MAX_LENGTH_LOTTERY),
-            "Lottery length outside of range"
-        );
+    require(
+        ((_endTime - block.timestamp) > MIN_LENGTH_LOTTERY) && ((_endTime - block.timestamp) < MAX_LENGTH_LOTTERY),
+        "Lottery length outside of range"
+    );
 
-        require(
-            (_priceTicketInCake >= minPriceTicketInCake) && (_priceTicketInCake <= maxPriceTicketInCake),
-            "Outside of limits"
-        );
+    require(
+        (_priceTicketInCake >= minPriceTicketInCake) && (_priceTicketInCake <= maxPriceTicketInCake),
+        "Outside of limits"
+    );
 
-        require(_discountDivisor >= MIN_DISCOUNT_DIVISOR, "Discount divisor too low");
-        require(_treasuryFee <= MAX_TREASURY_FEE, "Treasury fee too high");
+    require(_discountDivisor >= MIN_DISCOUNT_DIVISOR, "Discount divisor too low");
+    require(_treasuryFee <= MAX_TREASURY_FEE, "Treasury fee too high");
 
-        require(
-            (_rewardsBreakdown[0] +
-                _rewardsBreakdown[1] +
-                _rewardsBreakdown[2] +
-                _rewardsBreakdown[3] +
-                _rewardsBreakdown[4] +
-                _rewardsBreakdown[5]) == 10000,
-            "Rewards must equal 10000"
-        );
+    require(
+        (_rewardsBreakdown[0] +
+            _rewardsBreakdown[1] +
+            _rewardsBreakdown[2] +
+            _rewardsBreakdown[3] +
+            _rewardsBreakdown[4] +
+            _rewardsBreakdown[5]) == 10000,
+        "Rewards must equal 10000"
+    );
 
-        currentLotteryId++;
+    currentLotteryId++;
 
-        _lotteries[currentLotteryId] = Lottery({
-            status: Status.Open,
-            startTime: block.timestamp,
-            endTime: _endTime,
-            priceTicketInCake: _priceTicketInCake,
-            discountDivisor: _discountDivisor,
-            rewardsBreakdown: _rewardsBreakdown,
-            treasuryFee: _treasuryFee,
-            cakePerBracket: [uint256(0), uint256(0), uint256(0), uint256(0), uint256(0), uint256(0)],
-            countWinnersPerBracket: [uint256(0), uint256(0), uint256(0), uint256(0), uint256(0), uint256(0)],
-            firstTicketId: currentTicketId,
-            firstTicketIdNextLottery: currentTicketId,
-            amountCollectedInCake: pendingInjectionNextLottery,
-            finalNumber: 0
-        });
+    _lotteries[currentLotteryId] = Lottery({
+        status: Status.Open,
+        startTime: block.timestamp,
+        endTime: _endTime,
+        priceTicketInCake: _priceTicketInCake,
+        discountDivisor: _discountDivisor,
+        rewardsBreakdown: _rewardsBreakdown,
+        treasuryFee: _treasuryFee,
+        cakePerBracket: [uint256(0), uint256(0), uint256(0), uint256(0), uint256(0), uint256(0)],
+        countWinnersPerBracket: [uint256(0), uint256(0), uint256(0), uint256(0), uint256(0), uint256(0)],
+        firstTicketId: currentTicketId,
+        firstTicketIdNextLottery: currentTicketId,
+        amountCollectedInCake: pendingInjectionNextLottery,
+        finalNumber: 0
+    });
 
-        emit LotteryOpen(
-            currentLotteryId,
-            block.timestamp,
-            _endTime,
-            _priceTicketInCake,
-            currentTicketId,
-            pendingInjectionNextLottery
-        );
+    emit LotteryOpen(
+        currentLotteryId,
+        block.timestamp,
+        _endTime,
+        _priceTicketInCake,
+        currentTicketId,
+        pendingInjectionNextLottery
+    );
 
-        pendingInjectionNextLottery = 0;
-    }
+    pendingInjectionNextLottery = 0;
+}
 ```
 
-The `startLottery` function is only callable by the **Operator** in order to start a new lottery round.
+`startLottery` 函数仅供 **Operator** 调用，以启动新的彩票轮次。
 
 ### `closeLottery` - Operator
 
 ```typescript
 function closeLottery(uint256 _lotteryId) external override onlyOperator nonReentrant {
-        require(_lotteries[_lotteryId].status == Status.Open, "Lottery not open");
-        require(block.timestamp > _lotteries[_lotteryId].endTime, "Lottery not over");
-        _lotteries[_lotteryId].firstTicketIdNextLottery = currentTicketId;
+    require(_lotteries[_lotteryId].status == Status.Open, "Lottery not open");
+    require(block.timestamp > _lotteries[_lotteryId].endTime, "Lottery not over");
+    _lotteries[_lotteryId].firstTicketIdNextLottery = currentTicketId;
 
-        // Request a random number from the generator based on a seed
-        randomGenerator.getRandomNumber(uint256(keccak256(abi.encodePacked(_lotteryId, currentTicketId))));
+    // 根据种子请求生成器生成随机数
+    randomGenerator.getRandomNumber(uint256(keccak256(abi.encodePacked(_lotteryId, currentTicketId))));
 
-        _lotteries[_lotteryId].status = Status.Close;
+    _lotteries[_lotteryId].status = Status.Close;
 
-        emit LotteryClose(_lotteryId, currentTicketId);
-    }
+    emit LotteryClose(_lotteryId, currentTicketId);
+}
 ```
 
-Callable by the **Operator** to close a round of the lottery.
+由 **Operator** 调用以结束彩票轮次。
 
 ### `drawFinalNumberAndMakeLotteryClaimable` - Operator
 
 ```typescript
 function drawFinalNumberAndMakeLotteryClaimable(uint256 _lotteryId, bool _autoInjection)
-        external
-        override
-        onlyOperator
-        nonReentrant
-    {
-        require(_lotteries[_lotteryId].status == Status.Close, "Lottery not close");
-        require(_lotteryId == randomGenerator.viewLatestLotteryId(), "Numbers not drawn");
+    external
+    override
+    onlyOperator
+    nonReentrant
+{
+    require(_lotteries[_lotteryId].status == Status.Close, "Lottery not close");
+    require(_lotteryId == randomGenerator.viewLatestLotteryId(), "Numbers not drawn");
 
-        // Calculate the finalNumber based on the randomResult generated by ChainLink's fallback
-        uint32 finalNumber = randomGenerator.viewRandomResult();
+    // 基于 ChainLink 的随机生成器计算 finalNumber
+    uint32 finalNumber = randomGenerator.viewRandomResult();
 
-        // Initialize a number to count addresses in the previous bracket
-        uint256 numberAddressesInPreviousBracket;
+    // 初始化一个计数前一个等级地址数量的变量
+    uint256 numberAddressesInPreviousBracket;
 
-        // Calculate the amount to share post-treasury fee
-        uint256 amountToShareToWinners = (
-            ((_lotteries[_lotteryId].amountCollectedInCake) * (10000 - _lotteries[_lotteryId].treasuryFee))
-        ) / 10000;
+    // 计算扣除 Treasury 费用后的分配金额
+    uint256 amountToShareToWinners = (
+        ((_lotteries[_lotteryId].amountCollectedInCake) * (10000 - _lotteries[_lotteryId].treasuryFee))
+    ) / 10000;
 
-        // Initializes the amount to withdraw to treasury
-        uint256 amountToWithdrawToTreasury;
+    // 初始化提取到 Treasury 的金额
+    uint256 amountToWithdrawToTreasury;
 
-        // Calculate prizes in CAKE for each bracket by starting from the highest one
-        for (uint32 i = 0; i < 6; i++) {
-            uint32 j = 5 - i;
-            uint32 transformedWinningNumber = _bracketCalculator[j] + (finalNumber % (uint32(10)**(j + 1)));
+    // 从最高等级开始计算每个等级的 CAKE 奖金
+    for (uint32 i = 0; i < 6; i++) {
+        uint32 j = 5 - i;
+        uint32 transformedWinningNumber = _bracketCalculator[j] + (finalNumber % (uint32(10)**(j + 1)));
 
-            _lotteries[_lotteryId].countWinnersPerBracket[j] =
-                _numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] -
-                numberAddressesInPreviousBracket;
+        _lotteries[_lotteryId].countWinnersPerBracket[j] =
+            _numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] -
+            numberAddressesInPreviousBracket;
 
-            // A. If number of users for this _bracket number is superior to 0
-            if (
-                (_numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] - numberAddressesInPreviousBracket) !=
-                0
-            ) {
-                // B. If rewards at this bracket are > 0, calculate, else, report the numberAddresses from previous bracket
-                if (_lotteries[_lotteryId].rewardsBreakdown[j] != 0) {
-                    _lotteries[_lotteryId].cakePerBracket[j] =
-                        ((_lotteries[_lotteryId].rewardsBreakdown[j] * amountToShareToWinners) /
-                            (_numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] -
-                                numberAddressesInPreviousBracket)) /
-                        10000;
-
-                    // Update numberAddressesInPreviousBracket
-                    numberAddressesInPreviousBracket = _numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber];
-                }
-                // A. No CAKE to distribute, they are added to the amount to withdraw to treasury address
-            } else {
-                _lotteries[_lotteryId].cakePerBracket[j] = 0;
-
-                amountToWithdrawToTreasury +=
-                    (_lotteries[_lotteryId].rewardsBreakdown[j] * amountToShareToWinners) /
+        // A. 如果该等级的用户数量大于 0
+        if (
+            (_numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] - numberAddressesInPreviousBracket) !=
+            0
+        ) {
+            // B. 如果该等级的奖励 > 0，进行计算；否则，报告前级地址数
+            if (_lotteries[_lotteryId].rewardsBreakdown[j] != 0) {
+                _lotteries[_lotteryId].cakePerBracket[j] =
+                    ((_lotteries[_lotteryId].rewardsBreakdown[j] * amountToShareToWinners) /
+                        (_numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber] -
+                            numberAddressesInPreviousBracket)) /
                     10000;
+
+                // 更新前级地址数量
+                numberAddressesInPreviousBracket = _numberTicketsPerLotteryId[_lotteryId][transformedWinningNumber];
             }
+            // A. 没有 CAKE 分发，将其加入提取到 Treasury 的金额
+        } else {
+            _lotteries[_lotteryId].cakePerBracket[j] = 0;
+
+            amountToWithdrawToTreasury +=
+                (_lotteries[_lotteryId].rewardsBreakdown[j] * amountToShareToWinners) /
+                10000;
         }
-
-        // Update internal statuses for lottery
-        _lotteries[_lotteryId].finalNumber = finalNumber;
-        _lotteries[_lotteryId].status = Status.Claimable;
-
-        if (_autoInjection) {
-            pendingInjectionNextLottery = amountToWithdrawToTreasury;
-            amountToWithdrawToTreasury = 0;
-        }
-
-        amountToWithdrawToTreasury += (_lotteries[_lotteryId].amountCollectedInCake - amountToShareToWinners);
-
-        // Transfer CAKE to treasury address
-        cakeToken.safeTransfer(treasuryAddress, amountToWithdrawToTreasury);
-
-        emit LotteryNumberDrawn(currentLotteryId, finalNumber, numberAddressesInPreviousBracket);
     }
+
+    // 更新彩票的内部状态
+    _lotteries[_lotteryId].finalNumber = finalNumber;
+    _lotteries[_lotteryId].status = Status.Claimable;
+
+    if (_autoInjection) {
+        pendingInjectionNextLottery = amountToWithdrawToTreasury;
+        amountToWithdrawToTreasury = 0;
+    }
+
+    amountToWithdrawToTreasury += (_lotteries[_lotteryId].amountCollectedInCake - amountToShareToWinners);
+
+    // 将 CAKE 转移到 Treasury 地址
+    cakeToken.safeTransfer(treasuryAddress, amountToWithdrawToTreasury);
+
+    emit LotteryNumberDrawn(currentLotteryId, finalNumber, numberAddressesInPreviousBracket);
+}
 ```
 
-For **Operator** to draw the final number using ChainLink VRF function.
+**Operator** 使用 ChainLink VRF 函数进行最终号码抽奖。
 
 ### `recoverWrongTokens` - Owner
 
 ```typescript
-   function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
-        require(_tokenAddress != address(cakeToken), "Cannot be CAKE token");
+function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
+    require(_tokenAddress != address(cakeToken), "Cannot be CAKE token");
 
-        IERC20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
+    IERC20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
 
-        emit AdminTokenRecovery(_tokenAddress, _tokenAmount);
-    }
+    emit AdminTokenRecovery(_tokenAddress, _tokenAmount);
+}
 ```
 
-In the case of tokens other than CAKE mistakenly being sent to the lottery contract, this function is used to recover them and is only callable by the **Owner**
+如果错误地将非 CAKE 代币发送到彩票合约，**Owner** 可以使用此函数找回。
 
 ***
 
 ### `setMinAndMaxTicketPriceInCake` - Owner
 
 ```typescript
-    function setMinAndMaxTicketPriceInCake(uint256 _minPriceTicketInCake, uint256 _maxPriceTicketInCake)
-        external
-        onlyOwner
-    {
-        require(_minPriceTicketInCake <= _maxPriceTicketInCake, "minPrice must be < maxPrice");
+function setMinAndMaxTicketPriceInCake(uint256 _minPriceTicketInCake, uint256 _maxPriceTicketInCake)
+    external
+    onlyOwner
+{
+    require(_minPriceTicketInCake <= _maxPriceTicketInCake, "minPrice must be < maxPrice");
 
-        minPriceTicketInCake = _minPriceTicketInCake;
-        maxPriceTicketInCake = _maxPriceTicketInCake;
-    }
+    minPriceTicketInCake = _minPriceTicketInCake;
+    maxPriceTicketInCake = _maxPriceTicketInCake;
+}
 ```
 
-To prevent the **Operator** setting the tickets to arbitrary prices during the event of a flash crash/pump.
+防止 **Operator** 在闪崩/闪涨事件期间将票价设置为任意价格。
 
 ### `setMaxNumberTicketsPerBuy` - Owner
 
 ```typescript
 function setMaxNumberTicketsPerBuy(uint256 _maxNumberTicketsPerBuy) external onlyOwner {
-        require(_maxNumberTicketsPerBuy != 0, "Must be > 0");
-        maxNumberTicketsPerBuyOrClaim = _maxNumberTicketsPerBuy;
-    }
+    require(_maxNumberTicketsPerBuy != 0, "Must be > 0");
+    maxNumberTicketsPerBuyOrClaim = _maxNumberTicketsPerBuy;
+}
 ```
 
-The **Owner** can modify the maximum number of tickets per transaction. This may be modified in the case of BSC block size increasing or decreasing.
+**Owner** 可以修改每笔交易的最大票数。当 BSC 区块大小增加或减少时可能需要进行调整。
 
 ### `setOperatorAndTreasuryAndInjectorAddresses` - Owner
 
 ```typescript
 function setOperatorAndTreasuryAndInjectorAddresses(
-        address _operatorAddress,
-        address _treasuryAddress,
-        address _injectorAddress
-    ) external onlyOwner {
-        require(_operatorAddress != address(0), "Cannot be zero address");
-        require(_treasuryAddress != address(0), "Cannot be zero address");
-        require(_injectorAddress != address(0), "Cannot be zero address");
+    address _operatorAddress,
+    address _treasuryAddress,
+    address _injectorAddress
+) external onlyOwner {
+    require(_operatorAddress != address(0), "Cannot be zero address");
+    require(_treasuryAddress != address(0), "Cannot be zero address");
+    require(_injectorAddress != address(0), "Cannot be zero address");
 
-        operatorAddress = _operatorAddress;
-        treasuryAddress = _treasuryAddress;
-        injectorAddress = _injectorAddress;
+    operatorAddress = _operatorAddress;
+    treasuryAddress = _treasuryAddress;
+    injectorAddress = _injectorAddress;
 
-        emit NewOperatorAndTreasuryAndInjectorAddresses(_operatorAddress, _treasuryAddress, _injectorAddress);
-    }
+    emit NewOperatorAndTreasuryAndInjectorAddresses(_operatorAddress, _treasuryAddress, _injectorAddress);
+}
 ```
 
-Function used to set the **Operator**, **Treasury**, and **Injector** addresses.
+设置 **Operator**、**Treasury** 和 **Injector** 地址的函数。
 
 ### `changeRandomGenerator` - Owner
 
 ```typescript
-    function changeRandomGenerator(address _randomGeneratorAddress) external onlyOwner {
-        require(
-            (currentLotteryId == 0) || (_lotteries[currentLotteryId].status == Status.Claimable),
-            "Lottery not in claimable"
-        );
+function changeRandomGenerator(address _randomGeneratorAddress) external onlyOwner {
+    require(
+        (currentLotteryId == 0) || (_lotteries[currentLotteryId].status == Status.Claimable),
+        "Lottery not in claimable"
+    );
 
-        // Request a random number from the generator based on a seed
-        IRandomNumberGenerator(_randomGeneratorAddress).getRandomNumber(
-            uint256(keccak256(abi.encodePacked(currentLotteryId, currentTicketId)))
-        );
+    // 根据种子请求生成器生成随机数
+    IRandomNumberGenerator(_randomGeneratorAddress).getRandomNumber(
+        uint256(keccak256(abi.encodePacked(currentLotteryId, currentTicketId)))
+    );
 
-        // Calculate the finalNumber based on the randomResult generated by ChainLink's fallback
-        IRandomNumberGenerator(_randomGeneratorAddress).viewRandomResult();
+    // 基于 ChainLink 的随机生成器计算 finalNumber
+    IRandomNumberGenerator(_randomGeneratorAddress).viewRandomResult();
 
-        randomGenerator = IRandomNumberGenerator(_randomGeneratorAddress);
+    randomGenerator = IRandomNumberGenerator(_randomGeneratorAddress);
 
-        emit NewRandomGenerator(_randomGeneratorAddress);
-    }
+    emit NewRandomGenerator(_randomGeneratorAddress);
+}
 ```
 
-For the **Owner** to update the RandomNumberGenerator contract in case we need to update the drawing logic, or release an update.
+由 **Owner** 更新 RandomNumberGenerator 合约，以在需要更新抽奖逻辑或发布更新时使用。

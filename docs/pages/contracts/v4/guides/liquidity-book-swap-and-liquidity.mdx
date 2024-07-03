@@ -1,22 +1,21 @@
 import { Callout } from 'vocs/components'
 
-# Liquidity and swap for liquidity book pool
+# 流动性和流动性书池的交换
 
-In this guide, We'll make use of periphery contracts from [v4-periphery](https://github.com/pancakeswap/pancake-v4-periphery)
+在本指南中，我们将使用 [v4-periphery](https://github.com/pancakeswap/pancake-v4-periphery) 的外围合约
 
-1. Liquidity operations with `BinFungiblePositionManager`
-2. Swaps via `BinSwapRouter`
-
+1. 通过 `BinFungiblePositionManager` 进行流动性操作
+2. 通过 `BinSwapRouter` 进行交换
 
 <Callout type="info">
-  Before calling any of the functions below, do approve either BinFungiblePositionManager or BinSwapRouter.
+  在调用下面的任何函数之前，请确保已批准 BinFungiblePositionManager 或 BinSwapRouter。
 </Callout>
 
-## Liquidity operations
+## 流动性操作
 
 [BinFungiblePositionManager](https://github.com/pancakeswap/pancake-v4-periphery/blob/main/src/pool-bin/BinFungiblePositionManager.sol)
 
-### Add liquidity
+### 增加流动性
 
 ```solidity
 IBinFungiblePositionManager.AddLiquidityParams memory params = IBinFungiblePositionManager
@@ -24,8 +23,8 @@ IBinFungiblePositionManager.AddLiquidityParams memory params = IBinFungiblePosit
     poolKey: key,
     amount0: amountX,
     amount1: amountY,
-    amount0Min: 0, // note in real world, this should not be 0
-    amount1Min: 0, // note in real world, this should not be 0
+    amount0Min: 0, // 注意，这个值在实际应用中不应为0
+    amount1Min: 0, // 注意，这个值在实际应用中不应为0
     activeIdDesired: uint256(currentActiveId),
     idSlippage: 0,
     deltaIds: convertToRelative(binIds, currentActiveId),
@@ -38,8 +37,8 @@ IBinFungiblePositionManager.AddLiquidityParams memory params = IBinFungiblePosit
 (uint128 amount0, uint128 amount1, uint256[] memory tokenIds, uint256[] memory liquidityMinted)
   = positionManager.addLiquidity(params);
 
-/// @dev Given list of binIds and activeIds, return the delta ids.
-//       eg. given id: [100, 101, 102] and activeId: 101, return [-1, 0, 1]
+/// @dev 给定 binIds 和 activeIds 列表，返回 delta ids。
+//       例如，给定 id: [100, 101, 102] 和 activeId: 101，返回 [-1, 0, 1]
 function convertToRelative(uint24[] memory absoluteIds, uint24 activeId)
   internal
   pure
@@ -51,27 +50,26 @@ function convertToRelative(uint24[] memory absoluteIds, uint24 activeId)
 }
 ```
 
-Input:
+输入：
 
-- `poolKey`: struct which identify the pool
-- `amount0 | amount1`: amount of token0 and token1
-- `amount0Min | amount1Min`: min amount of token0 and token1. transaction will revert if required token is lesser
-- `activeIdDesired`: active id preferred when adding liquidity
-- `idSlippage`: max slippage on active id. transaction will revert if activeId changes more than idSlippage val
-- `deltaIds`: list of delta ids to add liquidity (`deltaId = activeId - desiredId`). see helper method `convertToRelative` above
-- `distributionX`: distribution of token0 with sum(distributionX) = 100e18 (100%)
-- `distributionY`: distribution of token1 with sum(distributionY) = 100e18 (100%)
-- `to`: address of recipient to receive the 1155 token which represent ownership of liquidity
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `poolKey`: 用于标识池的结构体
+- `amount0 | amount1`: token0 和 token1 的数量
+- `amount0Min | amount1Min`: token0 和 token1 的最小数量。如果所需的 token 小于该值，交易将被回滚
+- `activeIdDesired`: 增加流动性时所希望的 active id
+- `idSlippage`: 最大 active id 滑点。若 activeId 变动超过 idSlippage 值，交易回滚
+- `deltaIds`: 用于增加流动性的 delta ids 列表 (`deltaId = activeId - desiredId`)。参见上面的辅助方法 `convertToRelative`
+- `distributionX`: token0 的分配，总和（distributionX）为 100e18 (100%)
+- `distributionY`: token1 的分配，总和（distributionY）为 100e18 (100%)
+- `to`: 接收 1155 token 的收件人的地址，代表流动性的所有权
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-Output:
-- `amount0`: amount of token0 used for adding liquidity
-- `amount0`: amount of token1 used for adding liquidity
-- `tokenIds`: list of tokenIds minted for each bin
-- `liquidityMinted`: list of liquidity minted for each bin
+输出：
+- `amount0`: 用于增加流动性的 token0 数量
+- `amount1`: 用于增加流动性的 token1 数量
+- `tokenIds`: 为每个 bin 铸造的 tokenId 列表
+- `liquidityMinted`: 为每个 bin 铸造的流动性列表
 
-
-### Remove liqudiity
+### 移除流动性
 
 ```solidity
 IBinFungiblePositionManager.RemoveLiquidityParams memory params = IBinFungiblePositionManager
@@ -90,22 +88,21 @@ IBinFungiblePositionManager.RemoveLiquidityParams memory params = IBinFungiblePo
   = positionManager.removeLiquidity(params);
 ```
 
-Input:
+输入：
 
-- `poolKey`: struct which identify the pool
-- `amount0Min | amount1Min`: min amount of token0 and token1. transaction will revert if token out is lesser
-- `ids`: list of bin ids
-- `amounts`: list of lquidity to remove for each bin
-- `from`: Address of holder who have the liquidity
-- `to`: user to receive the the token0 and token1 from removing liquidity
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `poolKey`: 用于标识池的结构体
+- `amount0Min | amount1Min`: token0 和 token1 的最小数量。如果输出 token 小于此值，交易将被回滚
+- `ids`: bin id 列表
+- `amounts`: 每个 bin 要移除的流动性数量
+- `from`: 持有流动性的持有者地址
+- `to`: 接收移除流动性后 token0 和 token1 的用户
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-
-## Swaps
+## 交换
 
 [CLSwapRouter](https://github.com/pancakeswap/pancake-v4-periphery/blob/main/src/pool-cl/CLSwapRouter.sol)
 
-### Exact Input Single
+### 精确输入单次兑换
 
 ```solidity
 IBinSwapRouterBase.V4BinExactInputSingleParams memory params = IBinSwapRouterBase
@@ -121,22 +118,21 @@ IBinSwapRouterBase.V4BinExactInputSingleParams memory params = IBinSwapRouterBas
 uint256 amtOut = router.exactInputSingle(params, block.timestamp);
 ```
 
-Input:
+输入：
 
-- `poolKey`: struct which identify the pool
-- `swapForY`: if true swap token0 for token1, else swap token1 for token0
-- `recipient`: address to receive the output token
-- `amountIn`: desired amount in
-- `amountOutMinimum`: min amount out. transaction revert if amount out is lesser
-- `hookData`: if set, will be passed to hooks in both beforeSwap and afterSwap
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `poolKey`: 用于标识池的结构体
+- `swapForY`: 如果为 true，交换 token0 为 token1，否则交换 token1 为 token0
+- `recipient`: 接收输出 token 的地址
+- `amountIn`: 所需的输入数量
+- `amountOutMinimum`: 最小输出数量。如果输出数量小于该值，交易将回滚
+- `hookData`: 如果设置，将在 beforeSwap 和 afterSwap 中传递给 hooks
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-Output:
+输出：
 
-- `amountOut`: amount of token out from the swap
+- `amountOut`: 交换得到的输出 token 数量
 
-
-### Exact Input
+### 精确输入
 
 ```solidity
 bytes32 params;
@@ -172,20 +168,19 @@ IBinSwapRouterBase.V4BinExactInputParams memory input = IBinSwapRouterBase
 uint256 amountOut = router.exactInput(input, block.timestamp);
 ```
 
-Input:
+输入：
 
-- `currencyIn`: input token
-- `path`: Array of `PathKey[]` which describe the pool to hop
-- `recipient`: address to receive the output token
-- `amountIn`: desired amount in
-- `amountOutMinimum`: min amount out. transaction revert if amount out is lesser
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `currencyIn`: 输入的 token
+- `path`: 描述跳跃路径的 `PathKey[]` 数组 
+- `recipient`: 接收输出 token 的地址
+- `amountIn`: 所需的输入数量
+- `amountOutMinimum`: 最小输出数量。如果输出数量小于该值，交易将回滚
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-Output:
-- `amountOut`: amount of token out from the swap
+输出：
+- `amountOut`: 交换得到的输出 token 数量
 
-
-### Exact Output Single
+### 精确输出单次兑换
 
 ```solidity
 IBinSwapRouterBase.V4ExactOutputSingleParams memory input = IBinSwapRouterBase
@@ -201,21 +196,20 @@ IBinSwapRouterBase.V4ExactOutputSingleParams memory input = IBinSwapRouterBase
 uint256 amountIn = router.exactOutputSingle(input, block.timestamp);
 ```
 
-Input:
+输入：
 
-- `poolKey`: struct which identify the pool
-- `swapForY`: if true swap token0 for token1, else swap token1 for token0
-- `recipient`: address to receive the output token
-- `amountOut`: desired amount out
-- `amountInMaximum`: max amount in. transaction revert if amount out is lesser
-- `hookData`: if set, will be passed to hooks in both beforeSwap and afterSwap
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `poolKey`: 用于标识池的结构体
+- `swapForY`: 如果为 true，交换 token0 为 token1，否则交换 token1 为 token0
+- `recipient`: 接收输出 token 的地址
+- `amountOut`: 所需的输出数量
+- `amountInMaximum`: 最大输入数量。如果输出数量小于该值，交易将回滚
+- `hookData`: 如果设置，将在 beforeSwap 和 afterSwap 中传递给 hooks
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-Output:
-- `amountIn`: amount of token in from the swap
+输出：
+- `amountIn`: 交换需要的输入 token 数量
 
-
-### Exact Output
+### 精确输出
 
 ```solidity
 bytes32 params;
@@ -250,14 +244,14 @@ IBinSwapRouterBase.V4ExactOutputParams memory input = IBinSwapRouterBase
 uint256 amountIn = router.exactOutput(input, block.timestamp);
 ```
 
-Input:
+输入：
 
-- `currencyOut`: output token
-- `path`: Array of `PathKey[]` which describe the pool to hop
-- `recipient`: address to receive the output token
-- `amountOut`: desired amount out
-- `amountInMaximum`: max amount out. transaction revert if amountIn required is more.
-- `deadline`: deadline of this transaction. transaction will revert if `block.timestamp` is greater than `deadline`
+- `currencyOut`: 输出的 token
+- `path`: 描述跳跃路径的 `PathKey[]` 数组 
+- `recipient`: 接收输出 token 的地址
+- `amountOut`: 所需的输出数量
+- `amountInMaximum`: 最大输入数量。如果所需的输入量超过该值，交易将回滚
+- `deadline`: 此交易的截止时间。如果 `block.timestamp` 大于 `deadline`，交易将被回滚
 
-Output:
-- `amountIn`: amount of token in from the swap
+输出：
+- `amountIn`: 交换需要的输入 token 数量

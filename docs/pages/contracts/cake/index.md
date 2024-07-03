@@ -1,10 +1,10 @@
-# Cake Address
+# Cake 地址
 
-PancakeSwap uses LayerZero v1 OFT standard to bridge across chains. Bridge via the UI at https://bridge.pancakeswap.finance/ or see more at [here](/contracts/cake/cross-chain-cake-bridging)
+PancakeSwap 使用 LayerZero v1 OFT 标准在链间桥接。通过 UI 在 https://bridge.pancakeswap.finance/ 桥接，或查看更多 [这里](/contracts/cake/cross-chain-cake-bridging)
 
-**Mainnet**
+**主网**
 
-| Chain | Address |
+| 链 | 地址 |
 | ------------------------------------------ | ------------------------------------------ |
 | BSC |  0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82 |
 | ETH |  0x152649eA73beAb28c5b49B26eb48f7EAD6d4c898 |
@@ -15,14 +15,13 @@ PancakeSwap uses LayerZero v1 OFT standard to bridge across chains. Bridge via t
 | zkEVM | 0x0D1E753a25eBda689453309112904807625bEFBe |
 | zkSync | 0x3A287a06c66f9E95a56327185cA2BDF5f031cEcD |
 
-**Testnet**
+**测试网**
 
-| Chain | Address | 
+| 链 | 地址 | 
 | ------------------------------------------ | ------------------------------------------ |
-| BSC testnet | 0x8d008B313C1d6C7fE2982F62d32Da7507cF43551 |
+| BSC 测试网 | 0x8d008B313C1d6C7fE2982F62d32Da7507cF43551 |
 | ETH Goerli | 0xc2C3eAbE0368a2Ea97f485b03D1098cdD7d0c081 |
 | Base Goerli | 0x052a99849Ef2e13a5CB28275862991671D4b6fF5 |
 | Linea Goerli | 0x2B3C5df29F73dbF028BA82C33e0A5A6e5800F75e |
 | opBNB | 0xa11B290B038C35711eB309268a2460754f730921 |
 | zkEVM | 0x2B3C5df29F73dbF028BA82C33e0A5A6e5800F75e |
-

@@ -1,20 +1,20 @@
 # SmartChefInitializable
 
-## Contract Roles
+## 合约角色
 
-| Role              | Description        |
+| 角色              | 描述                |
 | ----------------- | ------------------ |
-| Owner (onlyOwner) | The contract owner |
+| 合约拥有者 (onlyOwner) | 合约的拥有者 |
 
-### Owner
+### 合约拥有者
 
-Address can be different depending on the pool, however, is usually `0xad9d97fc7bf0ac6dc68d478dcb3709454519b358`
+地址因池子不同而可能不同，但通常是 `0xad9d97fc7bf0ac6dc68d478dcb3709454519b358`
 
-This address controlled is by gnosis multisignature contract with a threshold of 3/6
+这个地址由阈值 3/6 的 Gnosis 多签合约控制
 
-## Functions
+## 函数
 
-### `emergencyRewardWithdraw` - Owner
+### `emergencyRewardWithdraw` - 合约拥有者
 
 ```typescript
     function emergencyRewardWithdraw(uint256 _amount) external onlyOwner {
@@ -22,9 +22,9 @@ This address controlled is by gnosis multisignature contract with a threshold of
     }
 ```
 
-In case of an emergency, the **Owner** can withdraw the rewards from a pool contract.
+在紧急情况下，**合约拥有者**可以从池子合约中提取奖励。
 
-### `recoverWrongTokens` - Owner
+### `recoverWrongTokens` - 合约拥有者
 
 ```typescript
  function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner {
@@ -36,9 +36,9 @@ In case of an emergency, the **Owner** can withdraw the rewards from a pool cont
         emit AdminTokenRecovery(_tokenAddress, _tokenAmount)
 ```
 
-Used by the **Owner** to recover tokens other than the `stakedToken` and `rewardToken` in case they are mistakenly sent to the contract.
+**合约拥有者**可以使用该函数回收误发送到合约中的非 `stakedToken` 和 `rewardToken` 代币。
 
-### `stopRewards` - Owner
+### `stopRewards` - 合约拥有者
 
 ```typescript
     function stopReward() external onlyOwner {
@@ -46,9 +46,9 @@ Used by the **Owner** to recover tokens other than the `stakedToken` and `reward
     }
 ```
 
-If a pool need stop distributing rewards prior to the intended end of the reward distribution, the **Owner** can call this function.
+如果需要在奖励分发结束前停止奖励分发，**合约拥有者**可以调用此函数。
 
-### `updatePoolLimitPerUser` - Owner
+### `updatePoolLimitPerUser` - 合约拥有者
 
 ```typescript
 function updatePoolLimitPerUser(bool _hasUserLimit, uint256 _poolLimitPerUser) external onlyOwner {
@@ -64,9 +64,9 @@ function updatePoolLimitPerUser(bool _hasUserLimit, uint256 _poolLimitPerUser) e
     }
 ```
 
-**Owner** can call this function to update the staking limit for each pool. The staking limit can only be increased, never decreased. This ensures that no user ever has more staked than the staking limit.
+**合约拥有者**可以调用此函数更新每个池子的质押限制。质押限制只能增加，不能减少。这确保了没有用户质押数量超过质押限制。
 
-### `UpdateRewardPerBlock` - Owner
+### `UpdateRewardPerBlock` - 合约拥有者
 
 ```typescript
  function updateRewardPerBlock(uint256 _rewardPerBlock) external onlyOwner {
@@ -76,9 +76,9 @@ function updatePoolLimitPerUser(bool _hasUserLimit, uint256 _poolLimitPerUser) e
     }
 ```
 
-Can be called by the **Owner**, but only prior to the start of the pool. This cannot be modified once the pool has begun.
+可以由 **合约拥有者** 调用，但只能在池子开始前调用。一旦池子开始，这个参数不能再修改。
 
-### `updateStartAndEndBlocks` - Owner
+### `updateStartAndEndBlocks` - 合约拥有者
 
 ```typescript
    function updateStartAndEndBlocks(uint256 _startBlock, uint256 _bonusEndBlock) external onlyOwner {
@@ -96,13 +96,13 @@ Can be called by the **Owner**, but only prior to the start of the pool. This ca
     }
 ```
 
-Can be called by the **Owner**, but only prior to the start of the pool. This cannot be modified once the pool has begun.
+可以由 **合约拥有者** 调用，但只能在池子开始前调用。一旦池子开始，这个参数不能再修改。
 
-### `transferOwnership` - Owner
+### `transferOwnership` - 合约拥有者
 
 ```typescript
         transferOwnership(_admin);
     }
 ```
 
-If the **Owner** needs to change the ownership of the contract, they can call this function.
+如果 **合约拥有者** 需要更改合约的所有权，他们可以调用此函数。

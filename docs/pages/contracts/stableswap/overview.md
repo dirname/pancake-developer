@@ -1,18 +1,18 @@
 ---
-description: Fork of Curve Finance
+description: Curve Finance 的分叉
 ---
 
-# Stable Swap
+# 稳定交换
 
-## Contract info
+## 合约信息
 
-### Binance smart chain
-Stableswap Factory Contract: `0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2`
+### Binance 智能链
+Stableswap Factory 合约地址: `0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2`
 
-View the [PancakeSwap: Stableswap Factory contract on BscScan](https://bscscan.com/address/0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2)
+查看 [PancakeSwap: Stableswap Factory 合约在 BscScan 上](https://bscscan.com/address/0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2)
 
-### Smart Router
+### 智能路由
 
-Contract address: `0xC6665d98Efd81f47B03801187eB46cbC63F328B0`
+合约地址: `0xC6665d98Efd81f47B03801187eB46cbC63F328B0`
 
-View the [PancakeSwap: Smart Router contract on BscScan](https://bscscan.com/address/0xc6665d98efd81f47b03801187eb46cbc63f328b0)
+查看 [PancakeSwap: Smart Router 合约在 BscScan 上](https://bscscan.com/address/0xc6665d98efd81f47b03801187eb46cbc63f328b0)

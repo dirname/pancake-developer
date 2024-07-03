@@ -1,19 +1,17 @@
 ---
 description: >-
-  Deploys PancakeSwap V3 pools and manages ownership and control over pool
-  protocol fees
+  部署 PancakeSwap V3 池并管理池协议费用的所有权和控制
 ---
 
 # PancakeV3Factory
 
-**Contract name:** PancakeFactory
+**合约名称:** PancakeFactory
 
-[Contract address](/contracts/v3/addresses#core)
+[合约地址](/contracts/v3/addresses#core)
 
 ## Solidity API
 
-
-Deploys PancakeSwap V3 pools and manages ownership and control over pool protocol fees
+部署 PancakeSwap V3 池并管理池协议费用的所有权和控制
 
 ### owner
 
@@ -21,9 +19,9 @@ Deploys PancakeSwap V3 pools and manages ownership and control over pool protoco
 address owner
 ```
 
-Returns the current owner of the factory
+返回当前工厂的所有者
 
-_Can be changed by the current owner via setOwner_
+_可以由当前所有者通过 setOwner 更改_
 
 ### poolDeployer
 
@@ -31,7 +29,7 @@ _Can be changed by the current owner via setOwner_
 address poolDeployer
 ```
 
-Returns the current pool deployer
+返回当前的池部署者
 
 ### feeAmountTickSpacing
 
@@ -39,9 +37,9 @@ Returns the current pool deployer
 mapping(uint24 => int24) feeAmountTickSpacing
 ```
 
-Returns the tick spacing for a given fee amount, if enabled, or 0 if not enabled
+返回给定费用金额的 Tick 间距（如果启用），或 0（如果未启用）
 
-_A fee amount can never be removed, so this value should be hard coded or cached in the calling context_
+_费用金额不能被移除，因此这个值应该在调用上下文中硬编码或缓存_
 
 ### getPool
 
@@ -49,9 +47,9 @@ _A fee amount can never be removed, so this value should be hard coded or cached
 mapping(address => mapping(address => mapping(uint24 => address))) getPool
 ```
 
-Returns the pool address for a given pair of tokens and a fee, or address 0 if it does not exist
+返回给定代币对和费用的池地址，如果不存在则返回地址 0
 
-_tokenA and tokenB may be passed in either token0/token1 or token1/token0 order_
+_tokenA 和 tokenB 可以以任意顺序传递：token0/token1 或 token1/token0_
 
 ### feeAmountTickSpacingExtraInfo
 
@@ -59,9 +57,9 @@ _tokenA and tokenB may be passed in either token0/token1 or token1/token0 order_
 mapping(uint24 => struct IPancakeV3Factory.TickSpacingExtraInfo) feeAmountTickSpacingExtraInfo
 ```
 
-Returns the tick spacing extra info
+返回 Tick 间距的额外信息
 
-_A fee amount can never be removed, so this value should be hard coded or cached in the calling context_
+_费用金额不能被移除，因此这个值应该在调用上下文中硬编码或缓存_
 
 ### constructor
 
@@ -75,23 +73,23 @@ constructor(address _poolDeployer) public
 function createPool(address tokenA, address tokenB, uint24 fee) external returns (address pool)
 ```
 
-Creates a pool for the given two tokens and fee
+为给定的两种代币和费用创建一个池
 
-_tokenA and tokenB may be passed in either order: token0/token1 or token1/token0. tickSpacing is retrieved from the fee. The call will revert if the pool already exists, the fee is invalid, or the token arguments are invalid._
+_tokenA 和 tokenB 可以按任意顺序传递：token0/token1 或 token1/token0。tickSpacing 从费用中检索。如果池已存在、费用无效或代币参数无效，则该调用将恢复。_
 
-**Parameters**
+**参数**
 
-| Name   | Type    | Description                                     |
-| ------ | ------- | ----------------------------------------------- |
-| tokenA | address | One of the two tokens in the desired pool       |
-| tokenB | address | The other of the two tokens in the desired pool |
-| fee    | uint24  | The desired fee for the pool                    |
+| 名称   | 类型    | 描述                          |
+| ------ | ------- | ----------------------------- |
+| tokenA | address | 目标池中的其中一个代币        |
+| tokenB | address | 目标池中的另一个代币          |
+| fee    | uint24  | 目标池的费用                  |
 
-**Return Values**
+**返回值**
 
-| Name | Type    | Description                           |
-| ---- | ------- | ------------------------------------- |
-| pool | address | The address of the newly created pool |
+| 名称 | 类型    | 描述                    |
+| ---- | ------- | ----------------------- |
+| pool | address | 新创建池的地址          |
 
 ### setOwner
 
@@ -99,15 +97,15 @@ _tokenA and tokenB may be passed in either order: token0/token1 or token1/token0
 function setOwner(address _owner) external
 ```
 
-Updates the owner of the factory
+更新工厂的所有者
 
-_Must be called by the current owner_
+_必须由当前所有者调用_
 
-**Parameters**
+**参数**
 
-| Name    | Type    | Description                  |
-| ------- | ------- | ---------------------------- |
-| \_owner | address | The new owner of the factory |
+| 名称    | 类型    | 描述                  |
+| ------- | ------- | --------------------- |
+| \_owner | address | 工厂的新所有者        |
 
 ### enableFeeAmount
 
@@ -115,16 +113,16 @@ _Must be called by the current owner_
 function enableFeeAmount(uint24 fee, int24 tickSpacing) public
 ```
 
-Enables a fee amount with the given tickSpacing
+启用具有给定 Tick 间距的费用金额
 
-_Fee amounts may never be removed once enabled_
+_启用后费用金额不能被移除_
 
-**Parameters**
+**参数**
 
-| Name        | Type   | Description                                                                              |
-| ----------- | ------ | ---------------------------------------------------------------------------------------- |
-| fee         | uint24 | The fee amount to enable, denominated in hundredths of a bip (i.e. 1e-6)                 |
-| tickSpacing | int24  | The spacing between ticks to be enforced for all pools created with the given fee amount |
+| 名称        | 类型   | 描述                                                   |
+| ----------- | ------ | ------------------------------------------------------ |
+| fee         | uint24 | 要启用的费用金额，以百亿分之一为单位（即 1e-6）        |
+| tickSpacing | int24  | 对于使用给定费用金额创建的所有池强制执行的 Tick 间距   |
 
 ### setWhiteListAddress
 
@@ -132,16 +130,16 @@ _Fee amounts may never be removed once enabled_
 function setWhiteListAddress(address user, bool verified) public
 ```
 
-Set an address into white list
+将一个地址添加到白名单中
 
-_Address can be updated by owner with boolean value false_
+_地址可以由所有者使用布尔值 false 更新_
 
-**Parameters**
+**参数**
 
-| Name     | Type    | Description                               |
-| -------- | ------- | ----------------------------------------- |
-| user     | address | The user address that add into white list |
-| verified | bool    |                                           |
+| 名称     | 类型    | 描述                             |
+| -------- | ------- | -------------------------------- |
+| user     | address | 添加到白名单的用户地址           |
+| verified | bool    | 是否验证                         |
 
 ### setFeeAmountExtraInfo
 
@@ -149,14 +147,14 @@ _Address can be updated by owner with boolean value false_
 function setFeeAmountExtraInfo(uint24 fee, bool whitelistRequested, bool enabled) public
 ```
 
-Set a fee amount extra info
+设置费用金额的额外信息
 
-_Fee amounts can be updated by owner with extra info_
+_费用金额的额外信息可以由所有者更新_
 
-**Parameters**
+**参数**
 
-| Name               | Type   | Description                                      |
-| ------------------ | ------ | ------------------------------------------------ |
-| fee                | uint24 |                                                  |
-| whitelistRequested | bool   | The flag whether should be created by owner only |
-| enabled            | bool   | The flag is the fee is enabled or not            |
+| 名称               | 类型   | 描述                               |
+| ------------------ | ------ | ---------------------------------- |
+| fee                | uint24 |                                    |
+| whitelistRequested | bool   | 是否只有所有者才能创建的标志       |
+| enabled            | bool   | 费用是否启用的标志                 |

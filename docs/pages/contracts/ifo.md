@@ -1,22 +1,22 @@
 ---
-description: Deployers for deploying new IFOs
+description: 用于部署新 IFO 的部署者
 ---
 
 # IFO
 
-## Contract info
+## 合约信息
 
-Each IFO has its own smart contract. You may find their address with the link to BscScan on the [history IFO](https://pancakeswap.finance/ifo/history) page, under each IFO sale.
+每个 IFO 都有其独立的智能合约。你可以在[历史 IFO](https://pancakeswap.finance/ifo/history)页面的每个 IFO 销售下找到它们的地址，并链接到 BscScan。
 
-Alternatively, you may track each IFO using its deployer.
+或者，你可以通过其部署者追踪每个 IFO。
 
-#### **IFO Deployers**
+#### **IFO 部署者**
 
-Latest:&#x20;
+最新:&#x20;
 
 * [0x7c5a0427242214c1Cf58B2c3fA7dC673b924212e](https://bscscan.com/address/0x7c5a0427242214c1Cf58B2c3fA7dC673b924212e#events)
 
-Previously Used:
+以前使用：
 
 * 0xa5465248b3A8986d86ACA968c0c076250263409F
 * 0x3b3e6b959b842a1634bb96b1d924e98bca38f4e7

@@ -8,9 +8,9 @@
 address factory
 ```
 
-The contract that deployed the pool, which must adhere to the IPancakeV3Factory interface
+部署池子的合约，必须符合 IPancakeV3Factory 接口
 
-**Return Values**
+**返回值**
 
 ### token0
 
@@ -18,9 +18,9 @@ The contract that deployed the pool, which must adhere to the IPancakeV3Factory 
 address token0
 ```
 
-The first of the two tokens of the pool, sorted by address
+池子中两种代币中排序在前的代币
 
-**Return Values**
+**返回值**
 
 ### token1
 
@@ -28,9 +28,9 @@ The first of the two tokens of the pool, sorted by address
 address token1
 ```
 
-The second of the two tokens of the pool, sorted by address
+池子中两种代币中排序在后的代币
 
-**Return Values**
+**返回值**
 
 ### fee
 
@@ -38,9 +38,9 @@ The second of the two tokens of the pool, sorted by address
 uint24 fee
 ```
 
-The pool's fee in hundredths of a bip, i.e. 1e-6
+池子的小费率，以百分之一 BIP 表示，即 1e-6
 
-**Return Values**
+**返回值**
 
 ### tickSpacing
 
@@ -48,11 +48,11 @@ The pool's fee in hundredths of a bip, i.e. 1e-6
 int24 tickSpacing
 ```
 
-The pool tick spacing
+池子的 tick 间隔
 
-_Ticks can only be used at multiples of this value, minimum of 1 and always positive e.g.: a tickSpacing of 3 means ticks can be initialized every 3rd tick, i.e., ..., -6, -3, 0, 3, 6, ... This value is an int24 to avoid casting even though it is always positive._
+_Tick 只能在此值的倍数处使用，最小值为 1 并且始终为正。例如：一个 tickSpacing 为 3 的池子表示 tick 只能每隔 3 个初始化一次，即 ..., -6, -3, 0, 3, 6, ... 为 int24 是为了避免强制类型转换，即使这个值始终是正数。_
 
-**Return Values**
+**返回值**
 
 ### maxLiquidityPerTick
 
@@ -60,19 +60,19 @@ _Ticks can only be used at multiples of this value, minimum of 1 and always posi
 uint128 maxLiquidityPerTick
 ```
 
-The maximum amount of position liquidity that can use any tick in the range
+任意 tick 区间中可使用的最大流动性头寸量
 
-_This parameter is enforced per tick to prevent liquidity from overflowing a uint128 at any point, and also prevents out-of-range liquidity from being used to prevent adding in-range liquidity to a pool_
+_此参数在每个 tick 上都是强制执行的，以防止流动性在任意时刻溢出 uint128，并且还可以防止不可用范围内的流动性被用来增加池子中的可用流动性。_
 
-**Return Values**
+**返回值**
 
-### PROTOCOL\_FEE\_SP
+### PROTOCOL_FEE_SP
 
 ```solidity
 uint32 PROTOCOL_FEE_SP
 ```
 
-### PROTOCOL\_FEE\_DENOMINATOR
+### PROTOCOL_FEE_DENOMINATOR
 
 ```solidity
 uint256 PROTOCOL_FEE_DENOMINATOR
@@ -98,9 +98,9 @@ struct Slot0 {
 struct PancakeV3Pool.Slot0 slot0
 ```
 
-The 0th storage slot in the pool stores many values, and is exposed as a single method to save gas when accessed externally.
+池子中的第 0 存储槽包含许多值，并且作为单个方法暴露，以节省外部访问时的 gas。
 
-**Return Values**
+**返回值**
 
 ### feeGrowthGlobal0X128
 
@@ -108,9 +108,9 @@ The 0th storage slot in the pool stores many values, and is exposed as a single 
 uint256 feeGrowthGlobal0X128
 ```
 
-The fee growth as a Q128.128 fees of token0 collected per unit of liquidity for the entire life of the pool
+整个池子生命周期内每单位流动性收集的 token0 的 Q128.128 费用增长
 
-_This value can overflow the uint256_
+_这个值可能会溢出 uint256_
 
 ### feeGrowthGlobal1X128
 
@@ -118,9 +118,9 @@ _This value can overflow the uint256_
 uint256 feeGrowthGlobal1X128
 ```
 
-The fee growth as a Q128.128 fees of token1 collected per unit of liquidity for the entire life of the pool
+整个池子生命周期内每单位流动性收集的 token1 的 Q128.128 费用增长
 
-_This value can overflow the uint256_
+_这个值可能会溢出 uint256_
 
 ### ProtocolFees
 
@@ -137,9 +137,9 @@ struct ProtocolFees {
 struct PancakeV3Pool.ProtocolFees protocolFees
 ```
 
-The amounts of token0 and token1 that are owed to the protocol
+协议应得的 token0 和 token1 的数量
 
-_Protocol fees will never exceed uint128 max in either token_
+_协议费用在任意代币中都不会超过 uint128 最大值_
 
 ### liquidity
 
@@ -147,9 +147,9 @@ _Protocol fees will never exceed uint128 max in either token_
 uint128 liquidity
 ```
 
-The currently in range liquidity available to the pool
+池子当前范围内可用的流动性
 
-_This value has no relationship to the total liquidity across all ticks_
+_这个值与所有 tick 的总流动性没有关系_
 
 ### ticks
 
@@ -157,11 +157,11 @@ _This value has no relationship to the total liquidity across all ticks_
 mapping(int24 => struct Tick.Info) ticks
 ```
 
-Look up information about a specific tick in the pool
+查找池子中特定 tick 的信息
 
-**Parameters**
+**参数**
 
-**Return Values**
+**返回值**
 
 #### tickBitmap
 
@@ -169,7 +169,7 @@ Look up information about a specific tick in the pool
 mapping(int16 => uint256) tickBitmap
 ```
 
-Returns 256 packed tick initialized boolean values. See TickBitmap for more information
+返回 256 位打包的 tick 初始化布尔值。详见 TickBitmap 获取更多信息
 
 ### positions
 
@@ -177,11 +177,11 @@ Returns 256 packed tick initialized boolean values. See TickBitmap for more info
 mapping(bytes32 => struct Position.Info) positions
 ```
 
-Returns the information about a position by the position's key
+通过位置键返回有关特定位置的信息
 
-**Parameters**
+**参数**
 
-**Return Values**
+**返回值**
 
 #### observations
 
@@ -189,13 +189,13 @@ Returns the information about a position by the position's key
 struct Oracle.Observation[65535] observations
 ```
 
-Returns data about a specific observation index
+返回特定观测索引的数据
 
-_You most likely want to use #observe() instead of this method to get an observation as of some amount of time ago, rather than at a specific index in the array._
+_您可能更愿意使用 #observe()，而不是此方法来获取某个时间戳之前的数据，不是数组中特定索引的数据。_
 
-**Parameters**
+**参数**
 
-**Return Values**
+**返回值**
 
 ### lmPool
 
@@ -215,7 +215,7 @@ event SetLmPoolEvent(address addr)
 modifier lock()
 ```
 
-_Mutually exclusive reentrancy protection into the pool to/from a method. This method also prevents entrance to a function before the pool is initialized. The reentrancy guard is required throughout the contract because we use balance checks to determine the payment status of interactions such as mint, swap and flash._
+_互斥的重入保护装置，用于从一个方法进入池子。这个方法也防止在池子初始化之前对一个函数的进入。由于我们使用余额检查来确定铸造、交换和闪电贷等交互的支付状态，该重入防护装置在合约中是必需的。_
 
 ### onlyFactoryOwner
 
@@ -223,7 +223,7 @@ _Mutually exclusive reentrancy protection into the pool to/from a method. This m
 modifier onlyFactoryOwner()
 ```
 
-_Prevents calling a function from anyone except the address returned by IPancakeV3Factory#owner()_
+_仅允许 IPancakeV3Factory#owner() 返回的地址调用该函数_
 
 ### constructor
 
@@ -231,13 +231,13 @@ _Prevents calling a function from anyone except the address returned by IPancake
 constructor() public
 ```
 
-### \_blockTimestamp
+### _blockTimestamp
 
 ```solidity
 function _blockTimestamp() internal view virtual returns (uint32)
 ```
 
-_Returns the block timestamp truncated to 32 bits, i.e. mod 2\*\*32. This method is overridden in tests._
+_返回被截断为 32 位的区块时间戳，即 mod 2\*\*32。此方法在测试中被覆盖。_
 
 ### snapshotCumulativesInside
 
@@ -245,24 +245,24 @@ _Returns the block timestamp truncated to 32 bits, i.e. mod 2\*\*32. This method
 function snapshotCumulativesInside(int24 tickLower, int24 tickUpper) external view returns (int56 tickCumulativeInside, uint160 secondsPerLiquidityInsideX128, uint32 secondsInside)
 ```
 
-Returns a snapshot of the tick cumulative, seconds per liquidity and seconds inside a tick range
+返回在 tick 范围内的 tick 累积值、每流动性秒数 和 每秒流动性
 
-_Snapshots must only be compared to other snapshots, taken over a period for which a position existed. I.e., snapshots cannot be compared if a position is not held for the entire period between when the first snapshot is taken and the second snapshot is taken._
+_快照必须只能与其他快照进行比较，而不是比较因子在期间内计算的快照。即，快照不能被比较，如果在第一个快照拍摄和第二个快照拍摄之间的整个期间内未持有头寸。_
 
-**Parameters**
+**参数**
 
-| Name      | Type  | Description                 |
-| --------- | ----- | --------------------------- |
-| tickLower | int24 | The lower tick of the range |
-| tickUpper | int24 | The upper tick of the range |
+| 名称      | 类型  | 描述         |
+| --------- | ----- | ------------ |
+| tickLower | int24 | 范围的下限 tick |
+| tickUpper | int24 | 范围的上限 tick |
 
-**Return Values**
+**返回值**
 
-| Name                          | Type    | Description                                         |
-| ----------------------------- | ------- | --------------------------------------------------- |
-| tickCumulativeInside          | int56   | The snapshot of the tick accumulator for the range  |
-| secondsPerLiquidityInsideX128 | uint160 | The snapshot of seconds per liquidity for the range |
-| secondsInside                 | uint32  | The snapshot of seconds per liquidity for the range |
+| 名称                      | 类型    | 描述                                         |
+| -------------------------- | ------- | -------------------------------------------- |
+| tickCumulativeInside       | int56   | 该范围内 tick 累积器的快照                   |
+| secondsPerLiquidityInsideX128 | uint160 | 该范围内每流动性秒数的快照                  |
+| secondsInside              | uint32  | 该范围内每流动性的秒数的快照                |
 
 ### observe
 
@@ -270,22 +270,22 @@ _Snapshots must only be compared to other snapshots, taken over a period for whi
 function observe(uint32[] secondsAgos) external view returns (int56[] tickCumulatives, uint160[] secondsPerLiquidityCumulativeX128s)
 ```
 
-Returns the cumulative tick and liquidity as of each timestamp `secondsAgo` from the current block timestamp
+返回从当前区块时间戳起的每个时间戳 `secondsAgo` 的累积 tick 和流动性
 
-_To get a time weighted average tick or liquidity-in-range, you must call this with two values, one representing the beginning of the period and another for the end of the period. E.g., to get the last hour time-weighted average tick, you must call it with secondsAgos = \[3600, 0]. The time weighted average tick represents the geometric time weighted average price of the pool, in log base sqrt(1.0001) of token1 / token0. The TickMath library can be used to go from a tick value to a ratio._
+_为了获得时间加权平均 tick 或范围内流动性，您需要用两个值调用这个方法，一个代表该期间的开始，另一个代表该期间结束。例如，要获得过去一小时的时间加权平均 tick，您必须用 `secondsAgos = [3600, 0]` 调用它。时间加权平均 tick 表示池子的几何时间加权平均价格，单位为 sqrt(1.0001) 的 log base 的 token1 / token0 比率。TickMath 库可以用来从 tick 值到比率的转换。_
 
-**Parameters**
+**参数**
 
-| Name        | Type      | Description                                                                   |
-| ----------- | --------- | ----------------------------------------------------------------------------- |
-| secondsAgos | uint32\[] | From how long ago each cumulative tick and liquidity value should be returned |
+| 名称        | 类型      | 描述                                                                 |
+| ---------- | ---------- | ----------------------------------------------------------------- |
+| secondsAgos | uint32\[] | 应返回每个`secondsAgo`的累积 tick 和流动性值的时间间隔            |
 
-**Return Values**
+**返回值**
 
-| Name                               | Type       | Description                                                                                               |
-| ---------------------------------- | ---------- | --------------------------------------------------------------------------------------------------------- |
-| tickCumulatives                    | int56\[]   | Cumulative tick values as of each `secondsAgos` from the current block timestamp                          |
-| secondsPerLiquidityCumulativeX128s | uint160\[] | Cumulative seconds per liquidity-in-range value as of each `secondsAgos` from the current block timestamp |
+| 名称                             | 类型       | 描述                                                                                                       |
+| -------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------- |
+| tickCumulatives                  | int56\[]   | 从当前区块时间戳起的每个 `secondsAgo` 的累积 tick 值                                                      |
+| secondsPerLiquidityCumulativeX128s | uint160\[] | 从当前区块时间戳起的每个 `secondsAgo` 的累积秒数范围内流动性值                                           |
 
 ### increaseObservationCardinalityNext
 
@@ -293,15 +293,15 @@ _To get a time weighted average tick or liquidity-in-range, you must call this w
 function increaseObservationCardinalityNext(uint16 observationCardinalityNext) external
 ```
 
-Increase the maximum number of price and liquidity observations that this pool will store
+增加池子将存储的价格和流动性观测的最大数量
 
-_This method is no-op if the pool already has an observationCardinalityNext greater than or equal to the input observationCardinalityNext._
+_如果池子已经有一个 observationCardinalityNext 大于或等于输入 observationCardinalityNext，则此方法将不起作用。_
 
-**Parameters**
+**参数**
 
-| Name                       | Type   | Description                                                      |
-| -------------------------- | ------ | ---------------------------------------------------------------- |
-| observationCardinalityNext | uint16 | The desired minimum number of observations for the pool to store |
+| 名称                       | 类型   | 描述                                                    |
+| -------------------------- | ------ | ----------------------------------------------------- |
+| observationCardinalityNext | uint16 | 池子要存储的最小观察数量                               |
 
 ### initialize
 
@@ -309,15 +309,15 @@ _This method is no-op if the pool already has an observationCardinalityNext grea
 function initialize(uint160 sqrtPriceX96) external
 ```
 
-Sets the initial price for the pool
+设置池子的初始价格
 
-_not locked because it initializes unlocked_
+_未加锁，因为它初始化未锁定_
 
-**Parameters**
+**参数**
 
-| Name         | Type    | Description                                    |
-| ------------ | ------- | ---------------------------------------------- |
-| sqrtPriceX96 | uint160 | the initial sqrt price of the pool as a Q64.96 |
+| 名称         | 类型    | 描述                                           |
+| ------------ | ------- | --------------------------------------------- |
+| sqrtPriceX96 | uint160 | 池子的初始 sqrt 价格，以 Q64.96 为单位        |
 
 ### ModifyPositionParams
 
@@ -336,26 +336,26 @@ struct ModifyPositionParams {
 function mint(address recipient, int24 tickLower, int24 tickUpper, uint128 amount, bytes data) external returns (uint256 amount0, uint256 amount1)
 ```
 
-Adds liquidity for the given recipient/tickLower/tickUpper position
+为给定的收款人/tickLower/tickUpper 位置添加流动性
 
-\_noDelegateCall is applied indirectly via _modifyPosition_
+\_noDelegateCall 间接通过 _modifyPosition 应用
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description                                              |
-| --------- | ------- | -------------------------------------------------------- |
-| recipient | address | The address for which the liquidity will be created      |
-| tickLower | int24   | The lower tick of the position in which to add liquidity |
-| tickUpper | int24   | The upper tick of the position in which to add liquidity |
-| amount    | uint128 | The amount of liquidity to mint                          |
-| data      | bytes   | Any data that should be passed through to the callback   |
+| 名称      | 类型    | 描述                                          |
+| --------- | ------- | --------------------------------------------- |
+| recipient | address | 将为其创建流动性的地址                        |
+| tickLower | int24   | 添加流动性的位置的下限 tick                   |
+| tickUpper | int24   | 添加流动性的位置的上限 tick                   |
+| amount    | uint128 | 添加的流动性数量                              |
+| data      | bytes   | 在回调时传递的数据                            |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                                                                                                 |
-| ------- | ------- | ----------------------------------------------------------------------------------------------------------- |
-| amount0 | uint256 | The amount of token0 that was paid to mint the given amount of liquidity. Matches the value in the callback |
-| amount1 | uint256 | The amount of token1 that was paid to mint the given amount of liquidity. Matches the value in the callback |
+| 名称    | 类型    | 描述                                                                      |
+| ------- | ------- | ----------------------------------------------------------------------- |
+| amount0 | uint256 | 为铸造给定的流动性数量支付的 token0 的数量。与回调中的值匹配              |
+| amount1 | uint256 | 为铸造给定的流动性数量支付的 token1 的数量。与回调中的值匹配              |
 
 ### collect
 
@@ -363,26 +363,26 @@ Adds liquidity for the given recipient/tickLower/tickUpper position
 function collect(address recipient, int24 tickLower, int24 tickUpper, uint128 amount0Requested, uint128 amount1Requested) external returns (uint128 amount0, uint128 amount1)
 ```
 
-Collects tokens owed to a position
+收集欠头寸的代币
 
-_Does not recompute fees earned, which must be done either via mint or burn of any amount of liquidity. Collect must be called by the position owner. To withdraw only token0 or only token1, amount0Requested or amount1Requested may be set to zero. To withdraw all tokens owed, caller may pass any value greater than the actual tokens owed, e.g. type(uint128).max. Tokens owed may be from accumulated swap fees or burned liquidity._
+_不重新计算应收取的费用，这必须通过铸造或烧毁任意数量的流动性来完成。Collect 必须由头寸所有者调用。要仅提取 token0 或 token1，可以将 amount0Requested 或 amount1Requested 设置为零。要提取所有欠的代币，调用者可以传递任何大于实际欠款代币的值，例如 type(uint128).max。欠款代币可能来自累计的交换费用或烧毁的流动性。_
 
-**Parameters**
+**参数**
 
-| Name             | Type    | Description                                              |
-| ---------------- | ------- | -------------------------------------------------------- |
-| recipient        | address | The address which should receive the fees collected      |
-| tickLower        | int24   | The lower tick of the position for which to collect fees |
-| tickUpper        | int24   | The upper tick of the position for which to collect fees |
-| amount0Requested | uint128 | How much token0 should be withdrawn from the fees owed   |
-| amount1Requested | uint128 | How much token1 should be withdrawn from the fees owed   |
+| 名称             | 类型    | 描述                                            |
+| ---------------- | ------- | ---------------------------------------------- |
+| recipient        | address | 接收收集到的费用的地址                          |
+| tickLower        | int24   | 需要收集费用的位置的下限 tick                   |
+| tickUpper        | int24   | 需要收集费用的位置的上限 tick                   |
+| amount0Requested | uint128 | 需要从应付费用中提取的 token0 数量              |
+| amount1Requested | uint128 | 需要从应付费用中提取的 token1 数量              |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                            |
-| ------- | ------- | -------------------------------------- |
-| amount0 | uint128 | The amount of fees collected in token0 |
-| amount1 | uint128 | The amount of fees collected in token1 |
+| 名称    | 类型    | 描述                                  |
+| ------- | ------- | ------------------------------------ |
+| amount0 | uint128 | 收集的 token0 费用的数量             |
+| amount1 | uint128 | 收集的 token1 费用的数量             |
 
 ### burn
 
@@ -390,24 +390,24 @@ _Does not recompute fees earned, which must be done either via mint or burn of a
 function burn(int24 tickLower, int24 tickUpper, uint128 amount) external returns (uint256 amount0, uint256 amount1)
 ```
 
-Burn liquidity from the sender and account tokens owed for the liquidity to the position
+将流动性从发送方烧毁并将流动性欠款记入池子头寸
 
-\_noDelegateCall is applied indirectly via _modifyPosition_
+\_noDelegateCall 间接通过 _modifyPosition 应用
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description                                                |
-| --------- | ------- | ---------------------------------------------------------- |
-| tickLower | int24   | The lower tick of the position for which to burn liquidity |
-| tickUpper | int24   | The upper tick of the position for which to burn liquidity |
-| amount    | uint128 | How much liquidity to burn                                 |
+| 名称      | 类型    | 描述                                          |
+| --------- | ------- | --------------------------------------------- |
+| tickLower | int24   | 烧毁流动性的位置的下限 tick                   |
+| tickUpper | int24   | 烧毁流动性的位置的上限 tick                   |
+| amount    | uint128 | 烧毁的流动性数量                              |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                                |
-| ------- | ------- | ------------------------------------------ |
-| amount0 | uint256 | The amount of token0 sent to the recipient |
-| amount1 | uint256 | The amount of token1 sent to the recipient |
+| 名称    | 类型    | 描述                                   |
+| ------- | ------- | ----------------------------------------- |
+| amount0 | uint256 | 发送给收款人的 token0 数量               |
+| amount1 | uint256 | 发送给收款人的 token1 数量               |
 
 ### SwapCache
 
@@ -456,26 +456,26 @@ struct StepComputations {
 function swap(address recipient, bool zeroForOne, int256 amountSpecified, uint160 sqrtPriceLimitX96, bytes data) external returns (int256 amount0, int256 amount1)
 ```
 
-Swap token0 for token1, or token1 for token0
+交换 token0 和 token1，或 token1 和 token0
 
-_The caller of this method receives a callback in the form of IPancakeV3SwapCallback#pancakeV3SwapCallback_
+_该方法的调用者将在回调形式收到 IPancakeV3SwapCallback#pancakeV3SwapCallback_
 
-**Parameters**
+**参数**
 
-| Name              | Type    | Description                                                                                                                                                                        |
-| ----------------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| recipient         | address | The address to receive the output of the swap                                                                                                                                      |
-| zeroForOne        | bool    | The direction of the swap, true for token0 to token1, false for token1 to token0                                                                                                   |
-| amountSpecified   | int256  | The amount of the swap, which implicitly configures the swap as exact input (positive), or exact output (negative)                                                                 |
-| sqrtPriceLimitX96 | uint160 | The Q64.96 sqrt price limit. If zero for one, the price cannot be less than this value after the swap. If one for zero, the price cannot be greater than this value after the swap |
-| data              | bytes   | Any data to be passed through to the callback                                                                                                                                      |
+| 名称              | 类型    | 描述                                                                                                                                                                       |
+| ----------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| recipient         | address | 收到交换输出的地址                                                                                                                                                            |
+| zeroForOne        | bool    | 交换方向，token0 到 token1 为 true，token1 到 token0 为 false                                                                                                               |
+| amountSpecified   | int256  | 交换的数量，隐含地配置为确切输入量（正数）或确切输出量（负数）                                                                                                                |
+| sqrtPriceLimitX96 | uint160 | Q64.96 的 sqrt 价格限制。如果 zeroForOne，交换后价格不能低于此值。如果 oneForZero，交换后价格不能高于此值                                                                       |
+| data              | bytes   | 在回调时传递的任何数据                                                                                                                                                         |
 
-**Return Values**
+**返回值**
 
-| Name    | Type   | Description                                                                                |
-| ------- | ------ | ------------------------------------------------------------------------------------------ |
-| amount0 | int256 | The delta of the balance of token0 of the pool, exact when negative, minimum when positive |
-| amount1 | int256 | The delta of the balance of token1 of the pool, exact when negative, minimum when positive |
+| 名称    | 类型   | 描述                                                                                                             |
+| ------- | ------ | ---------------------------------------------------------------------------------------------------------------- |
+| amount0 | int256 | 池子中 token0 余额的变化量，负数表示准确金额，正数表示最小金额                                                                                           |
+| amount1 | int256 | 池子中 token1 余额的变化量，负数表示准确金额，正数表示最小金额                                                                                           |
 
 ### flash
 
@@ -483,18 +483,18 @@ _The caller of this method receives a callback in the form of IPancakeV3SwapCall
 function flash(address recipient, uint256 amount0, uint256 amount1, bytes data) external
 ```
 
-Receive token0 and/or token1 and pay it back, plus a fee, in the callback
+接收 token0 和/或 token1 再加上费用，并在回调中偿还
 
-_The caller of this method receives a callback in the form of IPancakeV3FlashCallback#pancakeV3FlashCallback Can be used to donate underlying tokens pro-rata to currently in-range liquidity providers by calling with 0 amount{0,1} and sending the donation amount(s) from the callback_
+_此方法的调用者将在回调形式收到 IPancakeV3FlashCallback#pancakeV3FlashCallback。可以传递 0 amount{0,1} 调用回调捐赠基础代币予当前范围内的流动性提供者。_
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description                                                  |
-| --------- | ------- | ------------------------------------------------------------ |
-| recipient | address | The address which will receive the token0 and token1 amounts |
-| amount0   | uint256 | The amount of token0 to send                                 |
-| amount1   | uint256 | The amount of token1 to send                                 |
-| data      | bytes   | Any data to be passed through to the callback                |
+| 名称      | 类型    | 描述                                                  |
+| --------- | ------- | ------------------------------------------------------------- |
+| recipient | address | 接收 token0 和 token1 数量的地址                           |
+| amount0   | uint256 | 发送的 token0 数量                                          |
+| amount1   | uint256 | 发送的 token1 数量                                          |
+| data      | bytes   | 在回调时传递的任何数据                                      |
 
 ### setFeeProtocol
 
@@ -502,14 +502,14 @@ _The caller of this method receives a callback in the form of IPancakeV3FlashCal
 function setFeeProtocol(uint32 feeProtocol0, uint32 feeProtocol1) external
 ```
 
-Set the denominator of the protocol's % share of the fees
+设置协议的费用比例分母
 
-**Parameters**
+**参数**
 
-| Name         | Type   | Description                             |
-| ------------ | ------ | --------------------------------------- |
-| feeProtocol0 | uint32 | new protocol fee for token0 of the pool |
-| feeProtocol1 | uint32 | new protocol fee for token1 of the pool |
+| 名称         | 类型   | 描述                              |
+| ------------ | ------ | --------------------------------- |
+| feeProtocol0 | uint32 | 池子的 token0 新的协议费用        |
+| feeProtocol1 | uint32 | 池子的 token1 新的协议费用        |
 
 ### collectProtocol
 
@@ -517,22 +517,22 @@ Set the denominator of the protocol's % share of the fees
 function collectProtocol(address recipient, uint128 amount0Requested, uint128 amount1Requested) external returns (uint128 amount0, uint128 amount1)
 ```
 
-Collect the protocol fee accrued to the pool
+收集池子累计的协议费用
 
-**Parameters**
+**参数**
 
-| Name             | Type    | Description                                                                   |
-| ---------------- | ------- | ----------------------------------------------------------------------------- |
-| recipient        | address | The address to which collected protocol fees should be sent                   |
-| amount0Requested | uint128 | The maximum amount of token0 to send, can be 0 to collect fees in only token1 |
-| amount1Requested | uint128 | The maximum amount of token1 to send, can be 0 to collect fees in only token0 |
+| 名称             | 类型    | 描述                                                                 |
+| ---------------- | ------- | --------------------------------------------------------------------------- |
+| recipient        | address | 应收集协议费用的地址                                                       |
+| amount0Requested | uint128 | 发送的最大 token0 数量，可以是 0 以仅收集 token1 的费用                    |
+| amount1Requested | uint128 | 发送的最大 token1 数量，可以是 0 以仅收集 token0 的费用                    |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                          |
+| 名称    | 类型    | 描述                                |
 | ------- | ------- | ------------------------------------ |
-| amount0 | uint128 | The protocol fee collected in token0 |
-| amount1 | uint128 | The protocol fee collected in token1 |
+| amount0 | uint128 | 收集到的协议费用 token0 数量         |
+| amount1 | uint128 | 收集到的协议费用 token1 数量         |
 
 ### setLmPool
 

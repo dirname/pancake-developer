@@ -2,32 +2,32 @@
 description: v2
 ---
 
-# Lottery
+# 彩票
 
-## Contract info
+## 合约信息
 
-**Contract name:** PancakeSwapLottery\
-**Contract address:** 0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c\
-**Random number generator address:** 0x8c6375Aab6e5B26a30bF241EBBf29AD6e6c503c2\
-(_Random number generator contract must be deployed first_)
+**合约名称:** PancakeSwapLottery\
+**合约地址:** 0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c\
+**随机数生成器地址:** 0x8c6375Aab6e5B26a30bF241EBBf29AD6e6c503c2\
+(_随机数生成器合约必须首先部署_)
 
-View [PancakeSwapLottery.sol on BscScan](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c#code).
+查看 [BscScan 上的 PancakeSwapLottery.sol](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c#code)。
 
-View the [PancakeSwap: Lottery contract on BscScan](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c).
+查看 [BscScan 上的 PancakeSwap: Lottery 合约](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c)。
 
-## Audits
+## 审计
 
-The PancakeSwap Lottery V2 has been audited twice so far. View the results below:
+PancakeSwap 彩票 V2 目前已经被审计过两次。查看以下结果：
 
-[Peckshield's Lottery V2 Audit](https://github.com/peckshield/publications/blob/master/audit\_reports/PeckShield-Audit-Report-PancakeswapLottery-v1.0.pdf)
+[Peckshield 的彩票 V2 审计报告](https://github.com/peckshield/publications/blob/master/audit\_reports/PeckShield-Audit-Report-PancakeswapLottery-v1.0.pdf)
 
-[Slowmist's Lottery V2 Audit](https://github.com/slowmist/Knowledge-Base/blob/master/open-report/Smart%20Contract%20Security%20Audit%20Report%20-%20PancakeSwap%20Lottery.pdf)
+[Slowmist 的彩票 V2 审计报告](https://github.com/slowmist/Knowledge-Base/blob/master/open-report/Smart%20Contract%20Security%20Audit%20Report%20-%20PancakeSwap%20Lottery.pdf)
 
-## Lottery Status states
+## 彩票状态
 
-The lottery has four `Status` states, `Pending`, `Open`, `Close`, and `Claimable`, that determine which actions can and cannot be taken at a given time.
+彩票具有四种 `Status` 状态：`Pending`, `Open`, `Close` 和 `Claimable`，这些状态决定了在特定时间可以执行哪些操作。
 
-## Read/View functions
+## 读取/查看函数
 
 ### viewCurrentLotteryId
 
@@ -35,7 +35,7 @@ The lottery has four `Status` states, `Pending`, `Open`, `Close`, and `Claimable
 function viewCurrentLotteryId() external view override returns (uint256);
 ```
 
-Returns the Id# of the current Lottery round as an integer. Round Id#s correlate to round number, and are incremental, e.g. the ninth round of Lottery will be `9`.
+返回当前彩票轮次的 Id# 作为整数。轮次 Id# 对应轮次编号，且是递增的，例如，第九轮彩票的 Id# 为 `9`。
 
 ### viewLottery
 
@@ -43,14 +43,14 @@ Returns the Id# of the current Lottery round as an integer. Round Id#s correlate
 function viewLottery(uint256 _lotteryId) external view returns (Lottery memory);
 ```
 
-Returns information on specified Lottery round as tuple (see Lottery structure below).
+返回指定彩票轮次的信息作为一个元组（见下面的 Lottery 结构）。
 
 ```
         uint256 startTime;
         uint256 endTime;
         uint256 priceTicketInCake;
         uint256 discountDivisor;
-        uint256[6] rewardsBreakdown; // 0: 1 matching number // 5: 6 matching numbers
+        uint256[6] rewardsBreakdown; // 0: 1 个匹配的号码 // 5: 6 个匹配的号码
         uint256 treasuryFee; // 500: 5% // 200: 2% // 50: 0.5%
         uint256[6] cakePerBracket;
         uint256[6] countWinnersPerBracket;
@@ -60,20 +60,20 @@ Returns information on specified Lottery round as tuple (see Lottery structure b
         uint32 finalNumber;
 ```
 
-| Name                       | Type        | Description                                                                                                                                                                                                          |
-| -------------------------- | ----------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `startTime`                | uint256     | Starting block for Lottery round.                                                                                                                                                                                    |
-| `endTime`                  | uint256     | Ending block for Lottery round (approximately 12 hours after a round begins).                                                                                                                                        |
-| `priceTicketInCake`        | uint256     | The price of a ticket in CAKE (approximately $5 USD).                                                                                                                                                                |
-| `discountDivisor`          | uint256     | The divisor used to calculate bulk ticket discount.                                                                                                                                                                  |
-| `rewardsBreakdown`         | uint256\[6] | The division of rewards across brackets (total must add up to 10,000).                                                                                                                                               |
-| `treasuryFee`              | uint256     | Amount taken from funds raised per round that's moved to treasury address (maximum 3000).                                                                                                                            |
-| `cakePerBracket`           | uint256\[6] | The amount of CAKE to distribute to winners of each bracket.                                                                                                                                                         |
-| `countWinnersPerBracket`   | uint256\[6] | Moves through brackets, starting from the highest, accounting for winners when value > 0.                                                                                                                            |
-| `firstTicketId`            | uint256     | Id of the first ticket, set with the opening of the Lottery round, that determines the range of eligible tickets for the current round.                                                                              |
-| `firstTicketIdNextLottery` | uint256     | Id of the first ticket, set at the closing of current round, that determines the range of eligible tickets for the current round.                                                                                    |
-| `amountCollectedInCake`    | uint256     | The amount of CAKE collected through ticket sales for the Lottery round.                                                                                                                                             |
-| `finalNumber`              | uint32      | The final number determined by `randomResult` obtained from the number generator contract ([RandomNumberGenerator.sol](https://bscscan.com/address/0x8c6375Aab6e5B26a30bF241EBBf29AD6e6c503c2)) using Chainlink VRF. |
+| 名称                     | 类型        | 描述                                                                                                                                              |
+| ------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `startTime`              | uint256     | 彩票轮次的起始区块。                                                                                                                               |
+| `endTime`                | uint256     | 彩票轮次的结束区块（约为轮次开始后的 12 小时）。                                                                                                   |
+| `priceTicketInCake`      | uint256     | 单张彩票的价格（约为 $5 USD）。                                                                                                                   |
+| `discountDivisor`        | uint256     | 用于计算批量购票折扣的除数。                                                                                                                       |
+| `rewardsBreakdown`       | uint256\[6] | 不同档次的奖金分配（总和必须是 10,000）。                                                                                                           |
+| `treasuryFee`            | uint256     | 从每轮募集的资金中提取并转入国库地址的金额（最高 3000）。                                                                                          |
+| `cakePerBracket`         | uint256\[6] | 分配给每个档次中奖者的 CAKE 数量。                                                                                                                 |
+| `countWinnersPerBracket` | uint256\[6] | 从最高档次开始统计每个档次的中奖者数量，当值 > 0 时有效。                                                                                           |
+| `firstTicketId`          | uint256     | 彩票轮次开始时设置的第一张彩票的 Id，决定当前轮次的有效彩票范围。                                                                                   |
+| `firstTicketIdNextLottery`| uint256    | 当前轮次结束时设置的第一张彩票的 Id，决定下一轮次的有效彩票范围。                                                                                   |
+| `amountCollectedInCake`  | uint256     | 当前彩票轮次通过售票募集的 CAKE 数量。                                                                                                             |
+| `finalNumber`            | uint32      | 从随机数生成器合约（[RandomNumberGenerator.sol](https://bscscan.com/address/0x8c6375Aab6e5B26a30bF241EBBf29AD6e6c503c2)）中获得的`randomResult`确定的最终号码。 |
 
 ### viewNumbersAndStatusesForTicketIds
 
@@ -84,7 +84,7 @@ function viewNumbersAndStatusesForTicketIds(uint256[] calldata _ticketIds)
     returns (uint32[] memory, bool[] memory);
 ```
 
-Returns the corresponding numbers and the statuses of `ticketIds` array of tickets defined by their `ticketId`.
+返回由 `ticketId` 数组定义的彩票的对应号码和状态。
 
 ### viewRewardsForTicketId
 
@@ -95,13 +95,13 @@ function viewRewardsForTicketId(
     uint32 _bracket;
 ```
 
-Calculates rewards for a ticket after draw given the `lotteryId`, `ticketId`, and `bracket`. Filling and querying will provide a link to detailed price information on [BscScan](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c#readContract).
+在抽奖后根据 `lotteryId`、`ticketId` 和 `bracket` 计算一张彩票的奖励。填充和查询将提供一个指向 [BscScan](https://bscscan.com/address/0x5aF6D33DE2ccEC94efb1bDF8f92Bd58085432d2c#readContract) 上详细价格信息的链接。
 
-| Name        | Type    | Description                                                           |
-| ----------- | ------- | --------------------------------------------------------------------- |
-| `lotteryId` | uint256 | The id of the Lottery.                                                |
-| `ticketId`  | uint256 | The id of the ticket.                                                 |
-| `bracket`   | uint32  | Bracket for the `ticketId` to verify the claim and calculate rewards. |
+| 名称        | 类型    | 描述                                    |
+| ----------- | ------- | --------------------------------------- |
+| `lotteryId` | uint256 | 彩票的 id。                             |
+| `ticketId`  | uint256 | 彩票的 id。                             |
+| `bracket`   | uint32  | 用于验证认领和计算奖励的 `ticketId` 档次。|
 
 ### viewUserInfoForLotteryId
 
@@ -122,14 +122,14 @@ Calculates rewards for a ticket after draw given the `lotteryId`, `ticketId`, an
         )
 ```
 
-Returns user `lotteryTicketIds`, `ticketNumbers`, and `ticketStatuses` of a user for a given Lottery (defined by `lotteryID`).
+返回用户在给定彩票轮次（由 `lotteryID` 定义）的 `lotteryTicketIds`、`ticketNumbers` 和 `ticketStatuses`。
 
-| Name        | Type    | Description                                    |
-| ----------- | ------- | ---------------------------------------------- |
-| `user`      | address | The address of the user.                       |
-| `lotteryId` | uint256 | The id of the Lottery.                         |
-| `cursor`    | uint256 | Cursor to start where to retrieve the tickets. |
-| `size`      | uint256 | The number of tickets to retrieve.             |
+| 名称        | 类型    | 描述                             |
+| ----------- | ------- | -------------------------------- |
+| `user`      | address | 用户的地址。                      |
+| `lotteryId` | uint256 | 彩票的 id。                       |
+| `cursor`    | uint256 | 检索彩票时的起始光标。            |
+| `size`      | uint256 | 要检索的彩票数量。                |
 
 ### calculateRewardsForTicketId
 
@@ -141,13 +141,13 @@ Returns user `lotteryTicketIds`, `ticketNumbers`, and `ticketStatuses` of a user
     ) internal view returns (uint256);
 ```
 
-Calculates rewards for a ticket after draw given the `lotteryId`, `ticketId`, and `bracket`.
+在抽奖后根据 `lotteryId`、`ticketId` 和 `bracket` 计算一张彩票的奖励。
 
-| Name        | Type    | Description                                                           |
-| ----------- | ------- | --------------------------------------------------------------------- |
-| `lotteryId` | uint256 | The id of the Lottery.                                                |
-| `ticketId`  | uint256 | The id of the ticket.                                                 |
-| `bracket`   | uint32  | Bracket for the `ticketId` to verify the claim and calculate rewards. |
+| 名称        | 类型    | 描述                                    |
+| ----------- | ------- | --------------------------------------- |
+| `lotteryId` | uint256 | 彩票的 id。                             |
+| `ticketId`  | uint256 | 彩票的 id。                             |
+| `bracket`   | uint32  | 用于验证认领和计算奖励的 `ticketId` 档次。|
 
 ### calculateTotalPriceForBulkTickets
 
@@ -159,21 +159,21 @@ Calculates rewards for a ticket after draw given the `lotteryId`, `ticketId`, an
     ) external pure returns (uint256);
 ```
 
-Calculates the price for a set of tickets accounting for bulk discount.
+计算一组彩票的价格，考虑批量折扣。
 
 discountDivisor:
 
 $$totalPriceForBulkTickets = priceSingleTicket \cdot numberTickets \cdot \frac{(discountDivisor + 1 - numberTickets)}{discountDivisor}$$
 
-Filling and querying will provide a link to detailed price information on BscScan.
+填充和查询将提供 BscScan 上详细价格信息的链接。
 
-| Name              | Type    | Description                    |
-| ----------------- | ------- | ------------------------------ |
-| `discountDivisor` | uint256 | The divisor for the discount.  |
-| `priceTickets`    | uint256 | The price of a ticket in CAKE. |
-| `numberTickets`   | uint256 | The number of tickets to buy.  |
+| 名称              | 类型    | 描述                         |
+| ----------------- | ------- | ---------------------------- |
+| `discountDivisor` | uint256 | 折扣的除数。                 |
+| `priceTickets`    | uint256 | 单张彩票的价格（CAKE）。    |
+| `numberTickets`   | uint256 | 要购买的彩票数量。           |
 
-## Write functions (users)
+## 写函数（用户）
 
 ### buyTickets
 
@@ -181,12 +181,12 @@ Filling and querying will provide a link to detailed price information on BscSca
 function buyTickets(uint256 _lotteryId, uint32[] calldata _ticketNumbers) external override notContract nonReentrant;
 ```
 
-Buy tickets for the current `Open` Lottery round (between 1 and 100 per purchase). Calculates the price per ticket using `calculateTotalPriceForBulkTickets`.
+为当前 `Open` 状态的彩票轮次购买彩票（每次购买 1 到 100 张）。使用 `calculateTotalPriceForBulkTickets` 计算每张彩票的价格。
 
-| Name            | Type    | Description                                              |
-| --------------- | ------- | -------------------------------------------------------- |
-| `lotteryId`     | uint256 | The id of the lottery.                                   |
-| `ticketNumbers` | uint32  | Array of ticket numbers between 1,000,000 and 1,999,999. |
+| 名称            | 类型    | 描述                                   |
+| --------------- | ------- | -------------------------------------- |
+| `lotteryId`     | uint256 | 彩票的 id。                            |
+| `ticketNumbers` | uint32  | 介于 1,000,000 和 1,999,999 之间的彩票号码数组。 |
 
 ### claimTickets
 
@@ -198,15 +198,15 @@ Buy tickets for the current `Open` Lottery round (between 1 and 100 per purchase
     ) external override notContract nonReentrant;
 ```
 
-Claim a set of winning tickets for a `Claimable` Lottery round. Checks `lotteryId` to determine if round is claimable, ownership of `ticketId`, eligibility of ticket (`ticketId` falls between `firstTicketId` and `firstTicketIdNextLottery`), and whether `ticketId` falls within eligible prize `bracket` (between 0 and 5).
+为 `Claimable` 状态的彩票轮次认领奖励。检查 `lotteryId` 以确定轮次是否可认领，`ticketId` 的所有权，彩票的资格（`ticketId` 介于 `firstTicketId` 和 `firstTicketIdNextLottery` 之间），以及 `ticketId` 是否在符合要求的奖品 `bracket` 之内（介于 0 和 5 之间）。
 
-| Name        | Type    | Description                           |
-| ----------- | ------- | ------------------------------------- |
-| `lotteryId` | uint256 | The id of the Lottery.                |
-| `ticketIds` | uint32  | Array of `ticketId`s.                 |
-| `brackets`  | uint32  | Array of brackets for the ticket ids. |
+| 名称        | 类型    | 描述                            |
+| ----------- | ------- | ------------------------------- |
+| `lotteryId` | uint256 | 彩票的 id。                     |
+| `ticketIds` | uint32  | `ticketId` 数组。               |
+| `brackets`  | uint32  | 彩票 id 的档次数组。           |
 
-## Write functions (operator/admin)
+## 写函数（操作员/管理员）
 
 ### closeLottery
 
@@ -214,11 +214,11 @@ Claim a set of winning tickets for a `Claimable` Lottery round. Checks `lotteryI
 function closeLottery(uint256 _lotteryId) external override onlyOperator;
 ```
 
-Closes the `Open` Lottery to `Close` state. Emits `LotteryClose` event.
+将 `Open` 状态的彩票关闭为 `Close` 状态。发出 `LotteryClose` 事件。
 
-| Name        | Type    | Description            |
-| ----------- | ------- | ---------------------- |
-| `lotteryId` | uint256 | The id of the Lottery. |
+| 名称        | 类型    | 描述                |
+| ----------- | ------- | ------------------- |
+| `lotteryId` | uint256 | 彩票的 id。         |
 
 ### drawFinalNumberAndMakeLotteryClaimable
 
@@ -226,12 +226,12 @@ Closes the `Open` Lottery to `Close` state. Emits `LotteryClose` event.
     function drawFinalNumberAndMakeLotteryClaimable(uint256 _lotteryId, bool _autoInjection) external override onlyOperator nonReentrant;
 ```
 
-Lottery must be in `Close` state. Draws the final Lottery number for results from `randomResult`, calculates the rewards for brackets after accounting for treasury fee, makes Lottery state `Claimable`, and transfers treasury fee to treasury address.
+彩票必须处于 `Close` 状态。根据 `randomResult` 抽取最终的彩票号码，计算扣除国库费用后的各档次奖励，使彩票状态变为 `Claimable`，并将国库费用转移到国库地址。
 
-| Name            | Type    | Description                 |
-| --------------- | ------- | --------------------------- |
-| `lotteryId`     | uint256 | The id of the Lottery.      |
-| `autoInjection` | bool    | Automatic injection status. |
+| 名称            | 类型    | 描述                         |
+| --------------- | ------- | ---------------------------- |
+| `lotteryId`     | uint256 | 彩票的 id。                  |
+| `autoInjection` | bool    | 自动注入状态。              |
 
 ### changeRandomNumberGenerator
 
@@ -239,11 +239,11 @@ Lottery must be in `Close` state. Draws the final Lottery number for results fro
     function changeRandomGenerator(address _randomGeneratorAddress) external onlyOwner;
 ```
 
-Changes the random number generator contract address. Lottery must be `Claimable`.
+更改随机数生成器合约地址。彩票必须为 `Claimable`。
 
-| Name                     | Type    | Description                   |
+| 名称                     | 类型    | 描述                          |
 | ------------------------ | ------- | ----------------------------- |
-| `randomGeneratorAddress` | address | The random generator address. |
+| `randomGeneratorAddress` | address | 随机生成器合约的地址。        |
 
 ### injectFunds
 
@@ -251,12 +251,12 @@ Changes the random number generator contract address. Lottery must be `Claimable
 function injectFunds(uint256 _lotteryId, uint256 _amount) external override onlyOwner;
 ```
 
-Inject funds into a Lottery. Lottery must be `Open`.
+向彩票注入资金。彩票必须为 `Open`。
 
-| Name        | Type    | Description                       |
-| ----------- | ------- | --------------------------------- |
-| `lotteryId` | uint256 | The id of the Lottery.            |
-| `amount`    | uint256 | Amount, in CAKE token, to inject. |
+| 名称        | 类型    | 描述                             |
+| ----------- | ------- | -------------------------------- |
+| `lotteryId` | uint256 | 彩票的 id。                      |
+| `amount`    | uint256 | 以 CAKE 计算的注入金额。         |
 
 ### startLottery
 
@@ -270,15 +270,15 @@ Inject funds into a Lottery. Lottery must be `Open`.
     ) external override onlyOperator;
 ```
 
-Starts the Lottery, setting it to `Open` state. Status must be `Claimable`.
+启动彩票，将其设置为 `Open` 状态。状态必须为 `Claimable`。
 
-| Name                | Type        | Description                                                |
-| ------------------- | ----------- | ---------------------------------------------------------- |
-| `endTime`           | uint256     | End time of the Lottery.                                   |
-| `priceTicketInCake` | uint256     | Price of a ticket in CAKE.                                 |
-| `discountDivisor`   | uint256     | The divisor to calculate the discount magnitude for bulks. |
-| `rewardsBreakdown`  | uint256\[6] | Breakdown of rewards per bracket (must sum to 10,000).     |
-| `trasuryFee`        | uint256     | Treasury fee (10,000 = 100%, 100 = 1%).                    |
+| 名称                 | 类型        | 描述                                                         |
+| -------------------- | ----------- | ------------------------------------------------------------ |
+| `endTime`            | uint256     | 彩票的结束时间。                                            |
+| `priceTicketInCake`  | uint256     | 单张彩票的价格（CAKE）。                                    |
+| `discountDivisor`    | uint256     | 计算批量优惠幅度的除数。                                     |
+| `rewardsBreakdown`   | uint256\[6] | 每个档次的奖金分配（总和必须为 10,000）。                    |
+| `trasuryFee`         | uint256     | 国库费用（10,000 = 100%，100 = 1%）。                        |
 
 ### recoverWrongTokens
 
@@ -286,12 +286,12 @@ Starts the Lottery, setting it to `Open` state. Status must be `Claimable`.
 function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner;
 ```
 
-Allows admin to recover incorrect tokens sent to address mistakenly. Cannot be CAKE tokens.
+允许管理员回收错误发送到地址的代币。不能是 CAKE 代币。
 
-| Name           | Type    | Description                           |
-| -------------- | ------- | ------------------------------------- |
-| `tokenAddress` | address | The address of the token to withdraw. |
-| `tokenAmount`  | uint256 | The number of tokens to withdraw.     |
+| 名称           | 类型    | 描述                          |
+| -------------- | ------- | ----------------------------- |
+| `tokenAddress` | address | 要提取的代币地址。            |
+| `tokenAmount`  | uint256 | 要提取的代币数量。            |
 
 ### setMinAndMaxTicketPriceInCake
 
@@ -299,12 +299,12 @@ Allows admin to recover incorrect tokens sent to address mistakenly. Cannot be C
 function recoverWrongTokens(address _tokenAddress, uint256 _tokenAmount) external onlyOwner;
 ```
 
-Allows admin to set upper and lower limit of ticket price in CAKE value. Minimum price must be lower than maximum price.
+允许管理员设置彩票价格的上下限。最低价必须低于最高价。
 
-| Name                   | Type    | Description                |
-| ---------------------- | ------- | -------------------------- |
-| `minPriceTicketInCake` | uint256 | The minimum price in CAKE. |
-| `maxPriceTicketInCake` | uint256 | The maximum price in CAKE. |
+| 名称                   | 类型    | 描述                         |
+| ---------------------- | ------- | ---------------------------- |
+| `minPriceTicketInCake` | uint256 | CAKE 中彩票的最低价。        |
+| `maxPriceTicketInCake` | uint256 | CAKE 中彩票的最高价。        |
 
 ### setMaxNumberTicketsPerBuy
 
@@ -312,11 +312,11 @@ Allows admin to set upper and lower limit of ticket price in CAKE value. Minimum
 function setMaxNumberTicketsPerBuy(uint256 _maxNumberTicketsPerBuy) external onlyOwner;
 ```
 
-Set max number of tickets purchasable at a time (presently 100). Max number of tickets must be higher than 0.
+设置一次性可购买的彩票数量上限（目前为 100）。最大数量必须大于 0。
 
-| Name                     | Type    | Description                            |
-| ------------------------ | ------- | -------------------------------------- |
-| `maxNumberTicketsPerBuy` | uint256 | Max number of tickets in one purchase. |
+| 名称                     | 类型    | 描述                                       |
+| ------------------------ | ------- | ------------------------------------------ |
+| `maxNumberTicketsPerBuy` | uint256 | 一次性购买的最大彩票数量。                 |
 
 ### setOperatorAndTreasuryAndInjectorAddress
 
@@ -324,15 +324,15 @@ Set max number of tickets purchasable at a time (presently 100). Max number of t
 function setOperatorAndTreasuryAddresses(address _operatorAddress, address _treasuryAddress) external onlyOwner;
 ```
 
-Sets the address of the Lottery operator.
+设置彩票运营者的地址。
 
-| Name              | Type    | Description                  |
-| ----------------- | ------- | ---------------------------- |
-| `operatorAddress` | address | The address of the operator. |
-| `treasuryAddress` | address | The address of the treasury. |
-| `injectorAddress` | address | The address of the injector. |
+| 名称              | 类型    | 描述                      |
+| ----------------- | ------- | ------------------------- |
+| `operatorAddress` | address | 运营者的地址。            |
+| `treasuryAddress` | address | 国库的地址。              |
+| `injectorAddress` | address | 注入者的地址。            |
 
-## Events (User)
+## 事件（用户）
 
 ### TicketsPurchase
 
@@ -340,9 +340,9 @@ Sets the address of the Lottery operator.
 TicketsPurchase(address indexed buyer, uint256 indexed lotteryId, uint256 numberTickets);
 ```
 
-Lottery tickets are purchased.
+彩票被购买。
 
-Emitter: `buyTickets` [go to buyTickets](#buytickets)
+触发器：`buyTickets` [跳转到 buyTickets](#buytickets)
 
 ### TicketsClaim
 
@@ -350,11 +350,11 @@ Emitter: `buyTickets` [go to buyTickets](#buytickets)
 TicketsClaim(address indexed claimer, uint256 amount, uint256 indexed lotteryId, uint256 numberTickets);
 ```
 
-Lottery tickets are claimed post-draw.
+彩票在抽奖后被认领。
 
-Emitter: `claimTickets` [go to claimTickets](#claimtickets)
+触发器：`claimTickets` [跳转到 claimTickets](#claimtickets)
 
-## Events (admin)
+## 事件（管理员）
 
 ### AdminTokenRecovery
 
@@ -362,8 +362,9 @@ Emitter: `claimTickets` [go to claimTickets](#claimtickets)
 AdminTokenRecovery(address token, uint256 amount);
 ```
 
-Admin recovers incorrect tokens from Lottery address.
-Emitter: `recoverWrongTokens` [go to recoverWrongTokens](#recoverwrongtokens)
+管理员从彩票地址回收错误代币。
+
+触发器：`recoverWrongTokens` [跳转到 recoverWrongTokens](#recoverwrongtokens)
 
 ### LotteryClose
 
@@ -371,9 +372,9 @@ Emitter: `recoverWrongTokens` [go to recoverWrongTokens](#recoverwrongtokens)
 LotteryClose(uint256 indexed lotteryId, uint256 firstTicketIdNextLottery);
 ```
 
-The Lottery is closed. lotteryId is indexed and `firstTicketIdNextLottery` is determined by `currentTicketId`.
+彩票关闭。lotteryId 被索引，`firstTicketIdNextLottery` 由 `currentTicketId` 确定。
 
-Emitter: `closeLottery` [go to closeLottery](#closelottery)
+触发器：`closeLottery` [跳转到 closeLottery](#closelottery)
 
 ### LotteryInjection
 
@@ -381,9 +382,9 @@ Emitter: `closeLottery` [go to closeLottery](#closelottery)
 LotteryInjection(uint256 indexed lotteryId, uint256 amount);
 ```
 
-Funds are injected into Lottery.
+资金注入彩票。
 
-Emitter: `injectFunds` [go to injectFunds](#injectfunds)
+触发器：`injectFunds` [跳转到 injectFunds](#injectfunds)
 
 ### LotteryOpen
 
@@ -397,9 +398,9 @@ LotteryOpen(
     );
 ```
 
-The Lottery is opened. `firstTicketId` is set from `currentTicketId`,
+彩票开启。`firstTicketId` 从 `currentTicketId` 设置，
 
-Emitter: `startLottery` [go to startLottery](#startlottery)
+触发器：`startLottery` [跳转到 startLottery](#startlottery)
 
 ### LotteryNumberDrawn
 
@@ -407,9 +408,9 @@ Emitter: `startLottery` [go to startLottery](#startlottery)
 LotteryNumberDrawn(uint256 indexed lotteryId, uint256 finalNumber, uint256 countWinningTickets);
 ```
 
-Lottery numbers are drawn for Lottery round.
+彩票轮次的号码被抽取。
 
-Emitter: `drawFinalNumberAndMakeLotteryClaimable` go to [drawFinalNumberAndMakeLotteryClaimable](#drawfinalnumberandmakelotteryclaimable)
+触发器：`drawFinalNumberAndMakeLotteryClaimable` [跳转到 drawFinalNumberAndMakeLotteryClaimable](#drawfinalnumberandmakelotteryclaimable)
 
 ### NewOperatorAndTreasuryAndInjectorAddresses
 
@@ -417,9 +418,9 @@ Emitter: `drawFinalNumberAndMakeLotteryClaimable` go to [drawFinalNumberAndMakeL
 NewOperatorAndTreasuryAndInjectorAddresses(address operator, address treasury);
 ```
 
-New operator address is set.
+新运营者地址已设置。
 
-Emitter: `setOperatorAndTreasuryAndInjectorAddresses` [go to setOperatorAndTreasuryAndInjectorAddresses](#setoperatorandtreasuryandinjectoraddress)
+触发器：`setOperatorAndTreasuryAndInjectorAddresses` [跳转到 setOperatorAndTreasuryAndInjectorAddresses](#setoperatorandtreasuryandinjectoraddress)
 
 ### NewRandomNumberGenerator
 
@@ -427,6 +428,6 @@ Emitter: `setOperatorAndTreasuryAndInjectorAddresses` [go to setOperatorAndTreas
 NewRandomGenerator(address indexed randomGenerator);
 ```
 
-New random number generator address is set.
+新随机数生成器地址已设置。
 
-Emitter: `changeRandomGenerator` [go to changeRandomGenerator](#changerandomnumbergenerator)
+触发器：`changeRandomGenerator` [跳转到 changeRandomGenerator](#changerandomnumbergenerator)

@@ -1,62 +1,60 @@
-# AMM Layer | PoolManager
+# AMM 层 | PoolManager
 
-Pool Managers are singleton contract that encapsulates the logic for different types of AMMs. In the initial deployment, there will be 2 AMM types, visit their respective page to learn more about them.
+Pool Managers 是单例合约，封装了不同类型 AMMs 的逻辑。在初始部署中，将有 2 种 AMM 类型，访问它们各自的页面了解更多信息。
 
 1. [CLPoolManager](/contracts/v4/overview/amm-layer/concentrated-liquidity)
 2. [BinPoolManager](/contracts/v4/overview/amm-layer/liquidity-book)
 
-### Singleton
+### 单例
 
-In PancakeSwap v3, each pool is a separate contract. In PancakeSwap v4, all pools will be encapsulated in a single PoolManager contract. For example, all concentrated liquidity pools in [CLPoolManager](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/pool-cl/CLPoolManager.sol) and all liquidity book pools in [BinPoolManager](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/pool-bin/BinPoolManager.sol)
-
+在 PancakeSwap v3 中，每个池都是一个独立的合约。在 PancakeSwap v4 中，所有池将被封装在一个单一的 PoolManager 合约中。例如，所有集中流动性池在 [CLPoolManager](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/pool-cl/CLPoolManager.sol) 中，以及所有流动性书池在 [BinPoolManager](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/pool-bin/BinPoolManager.sol) 中。
 
 ### PoolKey | PoolId
 
-[PoolKey](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/types/PoolKey.sol) is a struct which describe each pool.
+[PoolKey](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/types/PoolKey.sol) 是描述每个池的结构体。
 
 ```solidity
-/// @notice Returns the key for identifying a pool
+/// @notice 返回用于标识池的关键数据
 struct PoolKey {
-    /// @notice The lower currency of the pool, sorted numerically
+    /// @notice 池中的低阶货币，按数值排序
     Currency currency0;
-    /// @notice The higher currency of the pool, sorted numerically
+    /// @notice 池中的高阶货币，按数值排序
     Currency currency1;
-    /// @notice The hooks of the pool, won't have a general interface because hooks interface vary on pool type
+    /// @notice 池的钩子，不会有通用接口，因为钩子接口因池类型不同
     IHooks hooks;
-    /// @notice The pool manager of the pool
+    /// @notice 池的池管理器
     IPoolManager poolManager;
-    /// @notice The pool swap fee, capped at 1_000_000. The upper 4 bits determine if the hook sets any fees.
+    /// @notice 池的交换费，上限为1_000_000。上位 4 位确定钩子是否设置费用。
     uint24 fee;
-    /// @notice Hooks callback and pool specific parameters, i.e. tickSpacing for CL, binStep for bin
+    /// @notice 钩子的回调和池的特定参数，例如 CL 的 tickSpacing，bin 的 binStep
     bytes32 parameters;
 }
 ```
 
-
-[PoolId](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/types/PoolId.sol) is a bytes32 of `keccak256(abi.encode(poolKey))` You will notice some input from PoolManager requiring PoolId. Derive `PoolId` from `PoolKey` via the following:
+[PoolId](https://github.com/pancakeswap/pancake-v4-core/blob/main/src/types/PoolId.sol) 是 `keccak256(abi.encode(poolKey))` 的 bytes32 。您会注意到某些来自 PoolManager 的输入需要 PoolId。通过以下方法从 `PoolKey` 派生 `PoolId`：
 
 ```solidity
 import {PoolIdLibrary} from "@pancakeswap/v4-core/src/types/PoolId.sol";
 
-// Use PoolIdLibrary for PoolKey type
+// 对 PoolKey 类型使用 PoolIdLibrary
 using PoolIdLibrary for PoolKey;
 
 PoolKey memory key = PoolKey({
   currency0: currency0,
-  currency1: currency1
+  currency1: currency1,
   hooks: IHooks(address(0)),
   poolManager: poolManager,
   fee: uint24(3000),
   parameters: bytes32(uint256(counterHook.getHooksRegistrationBitmap())).setTickSpacing(10)
 });
 
-// Get PoolId from PoolKey via PoolIdLibrary
+// 通过 PoolIdLibrary 从 PoolKey 获取 PoolId
 Poolid id = key.toId();
 ```
 
-### Initializing a Pool
+### 初始化池
 
-Before swap or liquidity operations can be performed on a pool, the first step would be to initialize the pool. To initialize, call either `CLPoolManager` or `BinPoolManager` initialize method.
+在池上进行交换或流动性操作之前，首先需要初始化池。要初始化，请调用 `CLPoolManager` 或 `BinPoolManager` 的初始化方法。
 
 ```solidity
 // CLPoolManager

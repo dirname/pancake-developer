@@ -1,17 +1,17 @@
 # SmartRouterV3
 
-## Contract Info
+## 合约信息
 
-[Contract address](/contracts/v3/addresses#smart-router)
+[合约地址](/contracts/v3/addresses#smart-router)
 
 :::info
-## Notice
+## 注意
 
-At the very end of all swaps via router, `refundETH` should be called. PancakeSwap will ensure this.
+在通过路由器完成所有交换操作的最后，应该调用 `refundETH`。PancakeSwap 将确保这一点。
 :::
 
 ## API
 
-### constructor
+### 构造函数
 
 `constructor(address _factoryV2, address _deployer, address _factoryV3, address _positionManager, address _stableFactory, address _stableInfo, address _WETH9) public`

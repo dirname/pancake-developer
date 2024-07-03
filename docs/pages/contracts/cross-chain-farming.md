@@ -1,6 +1,5 @@
 ---
-description: Contracts involved in cross-EVM-chains CAKE farming with Celer
+description: 参与 Celer 的跨 EVM 链 CAKE 农场合约
 ---
 
-# Cross Chain Farming
-
+# 跨链农场

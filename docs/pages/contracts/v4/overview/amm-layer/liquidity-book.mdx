@@ -2,57 +2,57 @@ import { Callout } from 'vocs/components'
 
 # Liquidity Book
 
-## Overview 
+## 概览
 
-In liquidity book AMM type, liquidity providers (LPs) have the flexibility to add liquidity in any shapes in a single call. Whereas liquidity are added in a uniform manner across the chosen price range for concentrated liquidity type.
+在 Liquidity Book AMM 类型中，流动性提供者（LPs）可以灵活地在一次调用中以任意形态添加流动性。而在集中流动性类型中，流动性是在所选价格区间内以均匀方式添加的。
 
-To add liquidity, LPs will specify a byte32 liquidityConfigs array. Each item in the array would indicate which bin and the percentage of amountIn would be added to this bin. For more details, see guides section on liquidity book.
+要添加流动性，LP 需要指定一个 byte32 类型的 liquidityConfigs 数组。数组中的每一项都表示将多少 amountIn 的百分比添加到哪个 bin 中。欲了解更多详细信息，请参阅关于 Liquidity Book 的指南部分。
 
 ```solidity
 struct MintParams {
-  /// @dev see more at LiquidityConfigurations.sol
+  /// @dev 详见 LiquidityConfigurations.sol
   ///   [0 - 24[: id
-  ///   [24 - 88[: distributionY - 1e18 represent 100% of token into this bin
-  ///   [88 - 152[: distributionX - 1e18 represent 100% of token into this bin 
-  ///   [152 - 256[: empty
+  ///   [24 - 88[: distributionY - 1e18 代表 100% 的代币进入该 bin
+  ///   [88 - 152[: distributionX - 1e18 代表 100% 的代币进入该 bin
+  ///   [152 - 256[: 空的
   bytes32[] liquidityConfigs;
 
-  /// @dev amountIn intended
+  /// @dev 预期的 amountIn
   bytes32 amountIn;
 }
 
-/// @dev see more at BinPoolManager.sol 
+/// @dev 详见 BinPoolManager.sol 
 function mint(PoolKey memory key, IBinPoolManager.MintParams calldata params, bytes calldata hookData);
 ```
 
-## Concepts
+## 概念
 
 ### Bin
 
 ![Liquidity book](/v4/amm-layer-poolmanager-bin-1.png)
 
-Think of bin as bucket where liquidity reside and there are a finite number of bins for each pool. Each bin has a price and id associated. 
+可以把 bin 想象成流动性所在的桶，每个池都有有限数量的 bin。每个 bin 都有一个相关的价格和 id。
 
 <Callout type="info">
-If a trade happen within a bin, it will incur 0 slippge. However if the trade consume all the liquidity within the bin and cross over to the next bin, there will be slippage.
+如果交易发生在某个 bin 内部，则不会产生滑点。然而，如果交易耗尽了 bin 内的所有流动性并跨越到下一个 bin，则会产生滑点。
 </Callout>
 
-### Bin Step
+### Bin 步长
 
-Bin step define the minimum price movement between two adjacent bin. This is one of the parameter in `PoolKey`. Keep in mind that there are trade off. While smaller bin steps allow for more precise positioning of liquidity, it might come with higher gas cost potentially. Larger bin step could be cheaper on gas but comes with higher slippage in trade execution potentially.
+Bin 步长定义了两个相邻 bin 之间的最小价格变动。这是 `PoolKey` 中的一个参数。请记住，这里有权衡。虽然较小的 bin 步长允许更精确地定位流动性，但可能会带来较高的 gas 费用。较大的 bin 步长可能会降低 gas 费用，但在执行交易时的滑点可能较高。
 
-| Bin Step | Price movement between bin |
+| Bin 步长 | bin 之间的价格变动 |
 | ------ | ------ |
 | 1 |  0.01% |
 | 10 | 0.1% |
 | 20  | 0.2% |
 | 100  | 1% |
 
-Upon initial deployment, the largest `BIN_STEP` for a pool can be 100. The limit can be raised in the future through governance process.
+在初始部署时，池中的最大 `BIN_STEP` 可以为 100。未来可以通过治理流程提高这个限值。
 
-### Bin Active id
+### Bin 活动 id
 
-Think of `activeId` as the current bin id. To retrieve the activeId of the bin
+可以将 `activeId` 视为当前的 bin id。要检索 bin 的 activeId
 
 ```solidity 
 // ref: BinPoolManager.sol
@@ -60,28 +60,27 @@ binPoolManager.getSlot0(PoolId) external
   returns (uint24 activeId, uint16 protocolFee, uint24 swapFee);
 ```
 
-### Bin Pricing 
+### Bin 定价
 
-Given the current `activeId` and `binStep`, we can calculate the current price of the pool.
+给定当前的 `activeId` 和 `binStep`，我们可以计算出池的当前价格。
 
 ```
 price: (1 + binStep / 10_000) ** (activeId - 8388608)
 ```
 
-Example: USDT/USDC pool with bin step = 1 and activeId = 8388608
+示例：USDT/USDC 池，bin step = 1 且 activeId = 8388608
 
 ```
 price: (1 + 1 / 10_000) ** (8388608 - 8388608) = 1
-// this means 1 USDT = 1 USDC 
+// 这意味着 1 USDT = 1 USDC
 ```
 
+### 可替换流动性
 
-### Fungible liquidity
-
-An advantage of Liquidity book is the fungible liquidity. Fungible liquidity provides flexibility in downstream defi application. When LPs add liquidity via `BinFungiblePositionManager.sol`, they get ERC1155 token.
+Liquidity book 的一个优势是可替换流动性。可替换流动性在下游的 DeFi 应用中提供了灵活性。当 LP 通过 `BinFungiblePositionManager.sol` 添加流动性时，他们会获得 ERC1155 代币。
 
 ```solidity
-/// Ref BinFungibleToken.sol (similar to ERC1155)
+/// 参考 BinFungibleToken.sol (类似于 ERC1155)
 function _mint(address to, uint256 id, uint256 amount) internal {
   totalSupply[id] += amount;
   unchecked {
@@ -90,4 +89,4 @@ function _mint(address to, uint256 id, uint256 amount) internal {
 }
 ```
 
-See [BinFungiblePositionManager](https://github.com/pancakeswap/pancake-v4-periphery/blob/main/src/pool-bin/BinFungiblePositionManager.sol#L189) on how a token is minted to the liquidity provider.
+请参阅 [BinFungiblePositionManager](https://github.com/pancakeswap/pancake-v4-periphery/blob/main/src/pool-bin/BinFungiblePositionManager.sol#L189)，了解如何向流动性提供者铸造代币。

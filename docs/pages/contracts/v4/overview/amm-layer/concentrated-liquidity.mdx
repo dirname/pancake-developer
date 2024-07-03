@@ -1,121 +1,119 @@
-# Concentrated Liquidity Pool
+# 集中流动性池
 
-## Overview 
+## 概览
 
-Concentrated Liquidity (from UniswapV3) enhances the traditional automated market maker (AMM) model.
-It allows liquidity providers (LPs) to concentrate their funds in specific price ranges within a pool, rather than evenly distributing liquidity across the entire trading range in v2.
+集中流动性（来自 UniswapV3）增强了传统的自动做市商（AMM）模型。
+它允许流动性提供者（LPs）将资金集中在池内的特定价格区间，而不是像 v2 那样在整个交易范围内均匀分布流动性。
 
-![Concentrated liquidity curve](/v4/amm-layer-poolmanager-cl-1.png)
+![集中流动性曲线](/v4/amm-layer-poolmanager-cl-1.png)
 
-## Concepts
+## 概念
 
 ### Tick
-Tick refers to a specific price point within a price range. The entire price range of a pool is divided into discrete intervals, and each interval is defined by `tickLower, tickUpper`. 
+Tick 指的是价格区间内的一个特定价格点。池的整个价格范围被划分为离散的区间，每个区间由 `tickLower, tickUpper` 定义。
 
 ```solidity 
-// From ICLPoolManager.sol
+// 源自 ICLPoolManager.sol
 struct ModifyLiquidityParams {
-    // the lower and upper tick of the position
+    // 头寸的上下 tick
     int24 tickLower;
     int24 tickUpper;
-    // how to modify the liquidity
+    // 如何修改流动性
     int256 liquidityDelta;
 }
 
-/// @dev see more at CLPoolManager
+/// @dev 更多信息请见 CLPoolManager
 function modifyLiquidity(PoolKey memory key, ICLPoolManager.ModifyLiquidityParams memory params, bytes calldata hookData);
 ```
 
-See below on examples on computing price from tick:
+以下是根据 tick 计算价格的示例：
 
 ```
 price = 1.0001 ** tick 
 ```
 
-####  Example 1: [CAKE/WETH](https://etherscan.io/address/0x517f451b0a9e1b87dc0ae98a05ee033c3310f046) pool:
+#### 示例 1: [CAKE/WETH](https://etherscan.io/address/0x517f451b0a9e1b87dc0ae98a05ee033c3310f046) 池:
 
 ```solidity
-// token0: CAKE (18 decimals)
-// token1: WETH (18 decimals)
-// tick: -68554 (as of 12 March 2024)
+// token0: CAKE (18 位小数)
+// token1: WETH (18 位小数)
+// tick: -68554 (截至 2024 年 3 月 12 日)
 
 price: 1.0001 ** -68554 = 0.00105411128
-// this also imply 1 CAKE = 0.00105411128 WETH 
+// 这也意味着 1 CAKE = 0.00105411128 WETH 
 ```
 
-#### Example 2: [WETH/USDT](https://etherscan.io/address/0x6ca298d2983ab03aa1da7679389d955a4efee15c) pool with different token decimals pool:
+#### 示例 2: [WETH/USDT](https://etherscan.io/address/0x6ca298d2983ab03aa1da7679389d955a4efee15c) 池，带有不同代币小数:
 
 ```solidity
-// token0: WETH (18 decimals)
-// token1: USDT (6 decimals)
-// tick:  -193256 (as of 12 March 2024)
+// token0: WETH (18 位小数)
+// token1: USDT (6 位小数)
+// tick: -193256 (截至 2024 年 3 月 12 日)
 
 price: 1.0001 ** -193256 = 4.04965646e-9
-// this also imply 1 WETH = 4.04965646e-9 USDT 
-// However WETH is 18 decimals and USDT is 6 decimal, we have to multiply by 12 decimals
-ratio of WETH/USDT with decimals: = 4.04965646e-9 * (10**18/10**6): 1 WETH = 4049.65646 USDT
+// 这也意味着 1 WETH = 4.04965646e-9 USDT 
+// 但是 WETH 是 18 位小数，而 USDT 是 6 位小数，我们必须将其乘以 12 位小数
+带小数的 WETH/USDT 比率: = 4.04965646e-9 * (10**18/10**6): 1 WETH = 4049.65646 USDT
 ```
 
-### Tick Spacing
+### Tick 间隔
 
-Tick spacing define the minimum price movement between two adjacent ticks within a pool. This is one of the parameter in `PoolKey`. 
-Keep in mind that there are trade off. While smaller tick spacing allow for more precise positioning of liquidity, it might come with higher gas cost potentially. Larger tick spacing could be cheaper on gas but comes with higher slippage in trade execution potentially.
+Tick 间隔定义了池内相邻两个 tick 之间的最小价格变动。这是 `PoolKey` 中的一个参数。
+请记住，这里存在权衡。较小的 tick 间隔允许更精确的流动性定位，但可能会带来更高的 gas 成本。较大的 tick 间隔在 gas 成本方面可能更便宜，但可能会在交易执行中带来更高的滑点。
 
-| Tick spacing | Price movement between tick |
+| Tick 间隔 | Tick 之间的价格变动 |
 | ------ | ------ |
-| 1 |  0.01% |
+| 1 | 0.01% |
 | 10 | 0.1% |
 | 50  | 0.5% |
 | 100  | 1% |
 
 
-
 ### sqrtPriceX96
 
-This uint160 value represent square root price ratio of token0 to token1. Its a binary fixed point number `Q64.96` which means 64 bits of integer and 96 bits as decimal. 
+这个 uint160 值表示 token0 和 token1 的平方根价格比率。它是一个二进制定点数 `Q64.96`，即 64 位整数和 96 位小数。
 
-Hence
+因此
 ```solidity
 sqrtPriceX96 = sqrt(price) * 2**96
 
-// shifting price to the LHS result in the below:
+// 将价格移到 LHS 结果如下：
 price = (sqrtPriceX96 / 2**96) ** 2
 ```
 
-See below on examples on computing price ratio from sqrtPriceX96:
+以下是根据 sqrtPriceX96 计算价格比率的示例：
 
-####  Example 1: [CAKE/WETH](https://etherscan.io/address/0x517f451b0a9e1b87dc0ae98a05ee033c3310f046) pool:
+#### 示例 1: [CAKE/WETH](https://etherscan.io/address/0x517f451b0a9e1b87dc0ae98a05ee033c3310f046) 池:
 
 ```solidity 
-// token0: CAKE (18 decimals)
-// token1: WETH (18 decimals)
-// sqrtPriceX96: 2574020484831874748518739167 (as of 12 March 2024)
+// token0: CAKE (18 位小数)
+// token1: WETH (18 位小数)
+// sqrtPriceX96: 2574020484831874748518739167 (截至 2024 年 3 月 12 日)
 
-// Price ratio of token0 (CAKE) and token1 (WETH):
+// token0 (CAKE) 与 token1 (WETH) 的价格比率：
 price = (2574020484831874748518739167 / 2**96) **2 = 0.00105551602
 
-CAKE to WETH: 1 CAKE = 0.00105551602 WETH 
-WETH to CAKE: 1 / 0.00105551602: 1 WETH = 947.40 CAKE 
+CAKE 对 WETH: 1 CAKE = 0.00105551602 WETH 
+WETH 对 CAKE: 1 / 0.00105551602: 1 WETH = 947.40 CAKE 
 
-// CAKE is around $4.3 and ETH is $4100. so 947.40 CAKE = 4073 USDC
+// CAKE 约为 $4.3 而 ETH 为 $4100。所以 947.40 CAKE = 4073 USDC
 ```
 
-
-#### Example 2: [WETH/USDT](https://etherscan.io/address/0x6ca298d2983ab03aa1da7679389d955a4efee15c) pool with different token decimals pool:
+#### 示例 2: [WETH/USDT](https://etherscan.io/address/0x6ca298d2983ab03aa1da7679389d955a4efee15c) 池，带有不同代币小数:
 
 ```solidity
-// token0: WETH (18 decimals)
-// token1: USDT (6 decimals)
-// sqrtPriceX96: 5046499860369450237927407 (as of 12 March 2024)
+// token0: WETH (18 位小数)
+// token1: USDT (6 位小数)
+// sqrtPriceX96: 5046499860369450237927407 (截至 2024 年 3 月 12 日)
 
-// Price ratio of token0 (WETH) in term of token1 (USDT): 4.0571e-9 ETH for 1 USDC
+// token0 (WETH) 与 token1 (USDT) 的价格比率: 4.0571e-9 ETH 对 1 USDC
 price = (5046499860369450237927407 / 2**96) **2 = 4.0571e-9
 
-WETH to USDC: 4.0571e-9 / (10**6/10**18): 1 WETH = 4057 USDT
-USDT to WETH: 4.0571e-9 / (10**18/10**6): 1 USDT = 4.0571e-21 WETH 
+WETH 对 USDC: 4.0571e-9 / (10**6/10**18): 1 WETH = 4057 USDT
+USDT 对 WETH: 4.0571e-9 / (10**18/10**6): 1 USDT = 4.0571e-21 WETH 
 ```
 
 
-### Liqudity delta
+### 流动性变化
 
-Liquidity delta, an `int` value refers to the differences in liquidity at `modifyLiquidity`. When its positive, it means user is adding liquidity, conversely when its negative, it means user is removing liquidity. Do refer to `LiquidityAmounts.sol` on calculating the liquidity.
+流动性变化，`int` 值，指的是 `modifyLiquidity` 时的流动性差异。当其为正时，表示用户正在增加流动性，相反，当其为负时，表示用户正在移除流动性。请参考 `LiquidityAmounts.sol` 来计算流动性。

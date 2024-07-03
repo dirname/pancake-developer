@@ -1,44 +1,42 @@
 ---
-description: PancakeSwap uses LayerZero OFT for Cross Chain CAKE Bridging
+description: PancakeSwap 使用 LayerZero OFT 实现跨链 CAKE 桥接
 ---
 
-# Cross Chain CAKE Bridging
+# 跨链 CAKE 桥接
 
-## Contract info
+## 合约信息
 
-#### **CAKE Bridging Contract**
+#### **CAKE 桥接合约**
 
-**Contract name:** CakeProxyOFT\
-**Contract address:** [0xb274202daBA6AE180c665B4fbE59857b7c3a8091](https://bscscan.com/address/0xb274202daBA6AE180c665B4fbE59857b7c3a8091#code)
+**合约名称：** CakeProxyOFT\
+**合约地址：** [0xb274202daBA6AE180c665B4fbE59857b7c3a8091](https://bscscan.com/address/0xb274202daBA6AE180c665B4fbE59857b7c3a8091#code)
 
-[View on BscScan](https://bscscan.com/address/0xb274202daBA6AE180c665B4fbE59857b7c3a8091#code)
+[在 BscScan 上查看](https://bscscan.com/address/0xb274202daBA6AE180c665B4fbE59857b7c3a8091#code)
 
-## Example of CAKE bridging to Aptos
+## CAKE 桥接到 Aptos 的示例
 
 **sendFrom**
-
 
 ```solidity
 function sendFrom(address _from, uint16 _dstChainId, bytes32 _toAddress, uint _amount, uint _minAmount, LzCallParams calldata _callParams) external payable;
 ```
 
-| Name        | Type    | Description                        |
+| 名称        | 类型    | 描述                        |
 | ----------- | ------- | ---------------------------------- |
-| _from  | address | From address. This should be the address calling the CakeProxyOFT           |
-| _dstChainId    | uint16   | `108` for Aptos mainnet                   |
-| _toAddress | bytes32   | The destination address on Aptos |
-| _amount | uint256   | Amount of CAKE in WEI. Please note that amounts less than 1e-8 will get dusted |
-| _minAmount | uint256   | Minimum receiving amount. We do not charge any fee in CAKE. But this should not be larger than `_amount` after being rounded down to 8 decimals |
-| _callParams | tuple   | A set of call parameters used to define bridging behaviours. Continue reading for more detail. |
-
+| _from  | address | 发起地址。这个地址应为调用 CakeProxyOFT 的地址           |
+| _dstChainId    | uint16   | Aptos 主网的链 ID 为 `108`                   |
+| _toAddress | bytes32   | Aptos 上的目标地址 |
+| _amount | uint256   | CAKE 的数量，以 WEI 为单位。请注意，小于 1e-8 的数量会被忽略 |
+| _minAmount | uint256   | 最低接收金额。我们不收取任何 CAKE 费用。但是，在四舍五入到 8 个小数点后，不应大于 `_amount` |
+| _callParams | tuple   | 用于定义桥接行为的一组调用参数。继续阅读以了解更多详细信息。 |
 
 :::info
-`sendFrom` is a payable function. You will need to pay around 0.005-0.01 in BNB for destination airdrop gas fees. This value will vary based on the price of BNB/APT.&#x20;
+`sendFrom` 是一个可以支付的函数。您需要支付大约 0.005-0.01 的 BNB 作为目标空投的燃料费用。此值会根据 BNB/APT 的价格而变化。
 
-Please note that if you define extra gas being airdropped to your destination address, you will need to increase this number or tx will revert with `not enough natives for fees`
+请注意，如果您定义了额外的空投燃料到您的目标地址，您需要增加这个数值，否则交易将因 `not enough natives for fees` 而失败。
 :::
 
-**How to form \`\_callParams\`**
+**如何构建 \`\_callParams\`**
 
 ```solidity
 {
@@ -48,14 +46,13 @@ Please note that if you define extra gas being airdropped to your destination ad
 }
 ```
 
-| Name        | Type    | Description                        |
+| 名称        | 类型    | 描述                        |
 | ----------- | ------- | ---------------------------------- |
-| refundAddress | address | Excess fee (BNB) will be returned to this address            |
+| refundAddress | address | 过剩的费用 (BNB) 将返回到该地址            |
 | zroPaymentAddress | address   | `0x0000000000000000000000000000000000000000`                 |
-| adapterParams | bytes   | A set of parameters to define destination gas airdropping. Continue reading for more detail. |
+| adapterParams | bytes   | 一组用于定义目标燃料空投的参数。继续阅读以了解更多详细信息。 |
 
-
-**How to form \`adapterParams\`**
+**如何构建 \`adapterParams\`**
 
 ```solidity
 {
@@ -66,15 +63,12 @@ Please note that if you define extra gas being airdropped to your destination ad
 }
 ```
 
-
-| Name        | Type    | Description                        |
+| 名称        | 类型    | 描述                        |
 | ----------- | ------- | ---------------------------------- |
-| `version` | uint16 | Default is 2            |
-| dstGasLimit | uint   | Default is `200000`                |
-| dstNativeGasTransferAmount | uint   | Amount destination native gas token to airdrop. Use `0` if you don't need the bridge to convert BNB and airdrop you APT |
-| dstNativeGasTransferAddress | bytes   | The destination address that receives native gas tokens on destination chain. |
-
-
+| `version` | uint16 | 默认为 2            |
+| dstGasLimit | uint   | 默认为 `200000`                |
+| dstNativeGasTransferAmount | uint   | 目标原生燃料代币的空投数量。如果您不需要桥接将 BNB 转换并空投给您 APT，则使用 `0` |
+| dstNativeGasTransferAddress | bytes   | 目标链上接收原生燃料代币的地址。 |
 
 ```javascript
 const adapterParams = utils.solidityPack(
@@ -83,12 +77,12 @@ const adapterParams = utils.solidityPack(
 )
 ```
 
-## Utilities
+## 实用工具
 
 * [GUI - CAKE - Aptos PancakeBridge](https://bridge.pancakeswap.finance/aptos)
-* [LayerZeroScan - track your crosschain txs](https://layerzeroscan.com/)
+* [LayerZeroScan - 跟踪您的跨链交易](https://layerzeroscan.com/)
 * [LayerZero Docs](https://layerzero.gitbook.io/docs/)
 
-## Audits
+## 审计
 
-[OtterSec's PancakeSwap CAKE OFT (Bridging) security audit](/contracts-aptos#audit)
+[OtterSec 对 PancakeSwap CAKE OFT (桥接) 的安全审计](/contracts-aptos#audit)

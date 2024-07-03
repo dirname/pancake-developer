@@ -1,8 +1,8 @@
 ---
-description: Fork of Uniswap v2
+description: Uniswap v2 的分叉
 ---
 
-# v2 contracts
+# v2 合约
 
 [factory-v2.md](factory-v2)
 

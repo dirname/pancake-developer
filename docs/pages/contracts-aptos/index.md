@@ -1,14 +1,13 @@
 ---
 description: >-
-  This page provides links or locations for PancakeSwap's smart contracts on
-  Aptos chain
+  本页面提供 PancakeSwap 在 Aptos 链上的智能合约链接或位置
 ---
 
-# Smart Contracts (Aptos)
+# 智能合约（Aptos）
 
-## Features
+## 功能
 
-PancakesSwap on Aptos! We have landed on Aptos and will continuously deploy more features.&#x20;
+PancakesSwap 已经上链到 Aptos！我们会不断部署更多功能。
 
 [pancakeswap-v2](v2/overview.mdx)
 
@@ -20,8 +19,8 @@ PancakesSwap on Aptos! We have landed on Aptos and will continuously deploy more
 
 https://github.com/pancakeswap/pancake-contracts-move
 
-## Audit
+## 审计
 
 <a className="vocs_Anchor vocs_Link vocs_Link_accent_underlined" href="/PancakeSwap_OFT_Audit_OtterSec.pdf" target="_blank">
-OtterSec's PancakeSwap CAKE OFT audit
+OtterSec 的 PancakeSwap CAKE OFT 审计报告
 </a>

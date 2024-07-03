@@ -15,8 +15,8 @@ export default defineConfig({
   topNav: [
     { text: 'EVM', link: '/contracts/v4/overview' },
     { text: 'Aptos', link: '/contracts-aptos' },
-    { text: 'APIs', link: '/apis/subgraph' },
-    { text: 'Bug Bounty', link: '/bug-bounty' },
+    { text: 'API', link: '/apis/subgraph' },
+    { text: '漏洞赏金', link: '/bug-bounty' },
   ],
   sidebar: {
     '/contracts': [
@@ -24,53 +24,53 @@ export default defineConfig({
         text: 'PancakeSwap V4',
         items: [
           {
-            text: 'Overview',
+            text: '概述',
             link: '/contracts/v4/overview',
             items: [
               {
-                text: 'Accounting Layer | Vault',
+                text: '会计层 | 金库',
                 link: '/contracts/v4/overview/accounting-layer-vault',
               },
               {
-                text: 'AMM Layer | Pool Manager',
+                text: 'AMM 层 | 池管理器',
                 collapsed: true,
                 link: '/contracts/v4/overview/amm-layer-poolmanager',
                 items: [
                   {
-                    text: 'Concentrated Liquidity',
+                    text: '集中流动性',
                     link: '/contracts/v4/overview/amm-layer/concentrated-liquidity',
                   },
                   {
-                    text: 'Liquidity Book',
+                    text: '流动性书',
                     link: '/contracts/v4/overview/amm-layer/liquidity-book',
                   },
                 ],
               },
               {
-                text: 'Custom Layer | Hook',
+                text: '自定义层 | Hook',
                 link: '/contracts/v4/overview/custom-layer-hook',
               },
             ],
           },
           {
-            text: 'Guides',
+            text: '指南',
             items: [
               {
-                text: 'Developing a hook',
+                text: '开发 Hook',
                 link: '/contracts/v4/guides/develop-a-hook',
               },
               {
-                text: 'CL Pool - Swap and Liqudiity',
+                text: 'CL 池 - 交换和流动性',
                 link: '/contracts/v4/guides/concentrated-liquidity-swap-and-liquidity',
               },
               {
-                text: 'Bin Pool - Swap and Liquidity',
+                text: 'Bin 池 - 交换和流动性',
                 link: '/contracts/v4/guides/liquidity-book-swap-and-liquidity',
               },
             ],
           },
           {
-            text: 'Resources',
+            text: '资源',
             collapsed: true,
             items: [
               {
@@ -78,7 +78,7 @@ export default defineConfig({
                 link: '/contracts/v4/resources/github',
               },
               {
-                text: 'Addresses',
+                text: '地址',
                 link: '/contracts/v4/resources/addresses',
               },
             ],
@@ -89,11 +89,11 @@ export default defineConfig({
         text: 'PancakeSwap v3',
         items: [
           {
-            text: 'Addresses',
+            text: '地址',
             link: '/contracts/v3/addresses',
           },
           {
-            text: 'Technical Overview',
+            text: '技术概述',
             collapsed: true,
             items: [
               {
@@ -110,7 +110,7 @@ export default defineConfig({
               },
               {
                 collapsed: true,
-                text: 'SmartRouter',
+                text: '智能路由器',
                 link: '/contracts/v3/smartrouter',
                 items: [
                   {
@@ -122,7 +122,7 @@ export default defineConfig({
                     link: '/contracts/v3/smartrouter/v2swaprouter',
                   },
                   {
-                    text: 'StableSwapRouter',
+                    text: '稳定交换路由器',
                     link: '/contracts/v3/smartrouter/stableswaprouter',
                   },
                 ],
@@ -149,7 +149,7 @@ export default defineConfig({
         text: '',
         items: [
           {
-            text: 'Universal Router',
+            text: '通用路由器',
             link: '/contracts/universal-router/addresses',
           },
           {
@@ -157,25 +157,25 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Overview',
+                text: '概述',
                 link: '/contracts/permit2',
               },
               {
-                text: 'Addresses',
+                text: '地址',
                 link: '/contracts/permit2/addresses',
               },
             ],
           },
           {
-            text: 'StableSwap',
+            text: '稳定交换',
             collapsed: true,
             items: [
               {
-                text: 'Overview',
+                text: '概述',
                 link: '/contracts/stableswap/overview',
               },
               {
-                text: 'Pool addresses',
+                text: '池地址',
                 link: '/contracts/stableswap/stableswap-pools',
               },
             ],
@@ -185,7 +185,7 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Addresses',
+                text: '地址',
                 link: '/contracts/masterchef/addresses',
               },
               {
@@ -195,15 +195,15 @@ export default defineConfig({
             ],
           },
           {
-            text: 'veCake and Gauge voting',
+            text: 'veCake 和投票',
             link: '/contracts/vecake-and-gauge-voting',
           },
           {
-            text: 'Syrup Pools',
+            text: '糖浆池',
             collapsed: true,
             items: [
               {
-                text: 'Overview',
+                text: '概述',
                 link: '/contracts/syrup-pools',
               },
               {
@@ -213,11 +213,11 @@ export default defineConfig({
             ],
           },
           {
-            text: 'Farm Booster (bCAKE)',
+            text: '农场助推器（bCAKE）',
             link: '/contracts/farm-booster-bcake',
           },
           {
-            text: 'IFO Commit Limit',
+            text: 'IFO 提交限制',
             link: '/contracts/ifo-commit-limit-icake',
           },
           {
@@ -225,17 +225,17 @@ export default defineConfig({
             collapsed: true,
             items: [
               {
-                text: 'Addresses',
+                text: '地址',
                 link: '/contracts/cake',
               },
               {
-                text: 'Cross Chain CAKE Bridging',
+                text: '跨链 CAKE 桥接',
                 link: '/contracts/cake/cross-chain-cake-bridging',
               },
             ]
           },
           {
-            text: 'CAKE Syrup Pool (deprecated)',
+            text: 'CAKE 糖浆池（已弃用）',
             link: '/contracts/fixed-term-staking-cake-pool',
           },
           {
@@ -243,30 +243,30 @@ export default defineConfig({
             link: '/contracts/ifo',
           },
           {
-            text: 'Prediction',
+            text: '预测',
             link: '/contracts/prediction-v2',
           },
           {
-            text: 'Lottery',
+            text: '彩票',
             collapsed: true,
             items: [
-              { text: 'Overview', link: '/contracts/lottery-v2' },
+              { text: '概述', link: '/contracts/lottery-v2' },
               {
-                text: 'Contract',
+                text: '合同',
                 link: '/contracts/lottery-v2/lottery-contract',
               },
             ],
           },
           {
-            text: 'Market Maker Pool',
+            text: '做市商池',
             link: '/contracts/market-maker-pool',
           },
           {
-            text: 'NFT Market',
+            text: 'NFT 市场',
             link: '/contracts/nft-market',
           },
           {
-            text: 'Affiliate Program',
+            text: '联盟计划',
             link: '/contracts/affiliate-program/overview',
           },
         ],
@@ -280,19 +280,19 @@ export default defineConfig({
             text: 'v2',
             items: [
               {
-                text: 'Overview',
+                text: '概述',
                 link: '/contracts-aptos/v2/overview',
               },
               {
-                text: 'Technical Overview',
+                text: '技术概述',
                 collapsed: true,
                 items: [
                   {
-                    text: 'Core',
+                    text: '核心',
                     link: '/contracts-aptos/v2/swap-core-v2',
                   },
                   {
-                    text: 'Router',
+                    text: '路由器',
                     link: '/contracts-aptos/v2/router-v2',
                   },
                 ],
@@ -306,7 +306,7 @@ export default defineConfig({
         link: '/contracts-aptos/masterchef',
       },
       {
-        text: 'Syrup Pools',
+        text: '糖浆池',
         link: '/contracts-aptos/syrup-pools',
       },
       {
@@ -314,7 +314,7 @@ export default defineConfig({
         link: '/contracts-aptos/ifo',
       },
       {
-        text: 'Utils',
+        text: '实用工具',
         link: '/contracts-aptos/utils',
       },
     ],

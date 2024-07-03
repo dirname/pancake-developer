@@ -1,14 +1,14 @@
 ---
-description: Wraps Pancake V3 positions in the ERC721 non-fungible token interface
+description: 将 Pancake V3 头寸包装在 ERC721 非同质化代币接口中
 ---
 
 # NonfungiblePositionManager
 
-### Contract Info
+### 合约信息
 
-**Contract name:** NonfungiblePositionManager
+**合约名称:** NonfungiblePositionManager
 
-[Contract address](/contracts/v3/addresses#periphery)
+[合约地址](/contracts/v3/addresses#periphery)
 
 ## Solidity API
 
@@ -29,7 +29,7 @@ struct Position {
 }
 ```
 
-### constructor
+### 构造函数
 
 ```solidity
 constructor(address _deployer, address _factory, address _WETH9, address _tokenDescriptor_) public
@@ -41,32 +41,32 @@ constructor(address _deployer, address _factory, address _WETH9, address _tokenD
 function positions(uint256 tokenId) external view returns (uint96 nonce, address operator, address token0, address token1, uint24 fee, int24 tickLower, int24 tickUpper, uint128 liquidity, uint256 feeGrowthInside0LastX128, uint256 feeGrowthInside1LastX128, uint128 tokensOwed0, uint128 tokensOwed1)
 ```
 
-Returns the position information associated with a given token ID.
+返回与给定 token ID 相关联的位置信息。
 
-_Throws if the token ID is not valid._
+_如果 token ID 无效，则抛出。_
 
-**Parameters**
+**参数**
 
-| Name    | Type    | Description                                      |
-| ------- | ------- | ------------------------------------------------ |
-| tokenId | uint256 | The ID of the token that represents the position |
+| 名称    | 类型    | 描述                                       |
+| ------- | ------- | ------------------------------------------ |
+| tokenId | uint256 | 表示该位置的 token ID                      |
 
-**Return Values**
+**返回值**
 
-| Name                     | Type    | Description                                                                      |
-| ------------------------ | ------- | -------------------------------------------------------------------------------- |
-| nonce                    | uint96  | The nonce for permits                                                            |
-| operator                 | address | The address that is approved for spending                                        |
-| token0                   | address | The address of the token0 for a specific pool                                    |
-| token1                   | address | The address of the token1 for a specific pool                                    |
-| fee                      | uint24  | The fee associated with the pool                                                 |
-| tickLower                | int24   | The lower end of the tick range for the position                                 |
-| tickUpper                | int24   | The higher end of the tick range for the position                                |
-| liquidity                | uint128 | The liquidity of the position                                                    |
-| feeGrowthInside0LastX128 | uint256 | The fee growth of token0 as of the last action on the individual position        |
-| feeGrowthInside1LastX128 | uint256 | The fee growth of token1 as of the last action on the individual position        |
-| tokensOwed0              | uint128 | The uncollected amount of token0 owed to the position as of the last computation |
-| tokensOwed1              | uint128 | The uncollected amount of token1 owed to the position as of the last computation |
+| 名称                     | 类型    | 描述                                                     |
+| ------------------------ | ------- | -------------------------------------------------------- |
+| nonce                    | uint96  | 许可的 nonce                                             |
+| operator                 | address | 被批准花费的地址                                         |
+| token0                   | address | 特定池中 token0 的地址                                   |
+| token1                   | address | 特定池中 token1 的地址                                   |
+| fee                      | uint24  | 该池相关的费用                                           |
+| tickLower                | int24   | 该位置的 tick 范围的下限                                 |
+| tickUpper                | int24   | 该位置的 tick 范围的上限                                 |
+| liquidity                | uint128 | 该位置的流动性                                           |
+| feeGrowthInside0LastX128 | uint256 | 最近一次单个位置操作时 token0 的手续费增长               |
+| feeGrowthInside1LastX128 | uint256 | 最近一次单个位置操作时 token1 的手续费增长               |
+| tokensOwed0              | uint128 | 截至最近一次计算时该位置未收取的 token0 数量             |
+| tokensOwed1              | uint128 | 截至最近一次计算时该位置未收取的 token1 数量             |
 
 ### mint
 
@@ -74,24 +74,24 @@ _Throws if the token ID is not valid._
 function mint(struct INonfungiblePositionManager.MintParams params) external payable returns (uint256 tokenId, uint128 liquidity, uint256 amount0, uint256 amount1)
 ```
 
-Creates a new position wrapped in a NFT
+创建一个新的由 NFT 包装的位置
 
-_Call this when the pool does exist and is initialized. Note that if the pool is created but not initialized a method does not exist, i.e. the pool is assumed to be initialized._
+_当池存在并已初始化时调用此方法。请注意，如果池已创建但未初始化，则方法不存在，即假设池已初始化。_
 
-**Parameters**
+**参数**
 
-| Name   | Type                                          | Description                                                                  |
-| ------ | --------------------------------------------- | ---------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManager.MintParams | The params necessary to mint a position, encoded as `MintParams` in calldata |
+| 名称   | 类型                                          | 描述                                                            |
+| ------ | --------------------------------------------- | --------------------------------------------------------------- |
+| params | struct INonfungiblePositionManager.MintParams | 铸造位置所需的参数，在 calldata 中编码为 `MintParams` 类型      |
 
-**Return Values**
+**返回值**
 
-| Name      | Type    | Description                                             |
-| --------- | ------- | ------------------------------------------------------- |
-| tokenId   | uint256 | The ID of the token that represents the minted position |
-| liquidity | uint128 | The amount of liquidity for this position               |
-| amount0   | uint256 | The amount of token0                                    |
-| amount1   | uint256 | The amount of token1                                    |
+| 名称      | 类型    | 描述                                  |
+| --------- | ------- | ------------------------------------- |
+| tokenId   | uint256 | 表示铸造位置的 token ID               |
+| liquidity | uint128 | 该位置的流动性                        |
+| amount0   | uint256 | token0 的数量                         |
+| amount1   | uint256 | token1 的数量                         |
 
 ### isAuthorizedForToken
 
@@ -111,7 +111,7 @@ function tokenURI(uint256 tokenId) public view returns (string)
 function baseURI() public pure returns (string)
 ```
 
-\_Returns the base URI set via {_setBaseURI}. This will be automatically added as a prefix in {tokenURI} to each token's URI, or to the token ID if no specific URI is set for that token ID._
+_返回通过 {_setBaseURI} 设置的基础 URI。它会自动添加为每个 token URI 的前缀，或如果未为该 token ID 设置特定 URI，则添加为 token ID 的前缀。_
 
 ### increaseLiquidity
 
@@ -119,21 +119,21 @@ function baseURI() public pure returns (string)
 function increaseLiquidity(struct INonfungiblePositionManager.IncreaseLiquidityParams params) external payable returns (uint128 liquidity, uint256 amount0, uint256 amount1)
 ```
 
-Increases the amount of liquidity in a position, with tokens paid by the `msg.sender`
+增加位置中的流动性，使用 `msg.sender` 支付的代币
 
-**Parameters**
+**参数**
 
-| Name   | Type                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManager.IncreaseLiquidityParams | tokenId The ID of the token for which liquidity is being increased, amount0Desired The desired amount of token0 to be spent, amount1Desired The desired amount of token1 to be spent, amount0Min The minimum amount of token0 to spend, which serves as a slippage check, amount1Min The minimum amount of token1 to spend, which serves as a slippage check, deadline The time by which the transaction must be included to effect the change |
+| 名称   | 类型                                                       | 描述                                                                                                                   |
+| ------ | ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| params | struct INonfungiblePositionManager.IncreaseLiquidityParams | tokenId 要增加流动性的 token ID，amount0Desired 要花费的 token0 数量，amount1Desired 要花费的 token1 数量，amount0Min 最低 token0 数量作为滑点检查，amount1Min 最低 token1 数量作为滑点检查，deadline 交易必须在此时间之前被包括以生效 |
 
-**Return Values**
+**返回值**
 
-| Name      | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| liquidity | uint128 | The new liquidity amount as a result of the increase |
-| amount0   | uint256 | The amount of token0 to achieve resulting liquidity  |
-| amount1   | uint256 | The amount of token1 to achieve resulting liquidity  |
+| 名称      | 类型    | 描述                                         |
+| --------- | ------- | -------------------------------------------- |
+| liquidity | uint128 | 由于增加后的新流动性                          |
+| amount0   | uint256 | 达到新流动性的 token0 数量                   |
+| amount1   | uint256 | 达到新流动性的 token1 数量                   |
 
 ### decreaseLiquidity
 
@@ -141,20 +141,20 @@ Increases the amount of liquidity in a position, with tokens paid by the `msg.se
 function decreaseLiquidity(struct INonfungiblePositionManager.DecreaseLiquidityParams params) external payable returns (uint256 amount0, uint256 amount1)
 ```
 
-Decreases the amount of liquidity in a position and accounts it to the position
+减少位置中的流动性，并将其记入位置
 
-**Parameters**
+**参数**
 
-| Name   | Type                                                       | Description                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------ | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManager.DecreaseLiquidityParams | tokenId The ID of the token for which liquidity is being decreased, amount The amount by which liquidity will be decreased, amount0Min The minimum amount of token0 that should be accounted for the burned liquidity, amount1Min The minimum amount of token1 that should be accounted for the burned liquidity, deadline The time by which the transaction must be included to effect the change |
+| 名称   | 类型                                                       | 描述                                                                                                   |
+| ------ | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| params | struct INonfungiblePositionManager.DecreaseLiquidityParams | tokenId 要减少流动性的 token ID，amount 减少的流动性数量，amount0Min 计入烧毁流动性的最小 token0 数量，amount1Min 计入烧毁流动性的最小 token1 数量，deadline 交易必须在此时间之前被包括以生效 |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                                                  |
-| ------- | ------- | ------------------------------------------------------------ |
-| amount0 | uint256 | The amount of token0 accounted to the position's tokens owed |
-| amount1 | uint256 | The amount of token1 accounted to the position's tokens owed |
+| 名称    | 类型    | 描述                                         |
+| ------- | ------- | -------------------------------------------- |
+| amount0 | uint256 | 记入该位置所属 token0 的数量                 |
+| amount1 | uint256 | 记入该位置所属 token1 的数量                 |
 
 ### collect
 
@@ -162,20 +162,20 @@ Decreases the amount of liquidity in a position and accounts it to the position
 function collect(struct INonfungiblePositionManager.CollectParams params) external payable returns (uint256 amount0, uint256 amount1)
 ```
 
-Collects up to a maximum amount of fees owed to a specific position to the recipient
+向接收者收集最多特定位置应得的费用
 
-**Parameters**
+**参数**
 
-| Name   | Type                                             | Description                                                                                                                                                                                                                  |
-| ------ | ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManager.CollectParams | tokenId The ID of the NFT for which tokens are being collected, recipient The account that should receive the tokens, amount0Max The maximum amount of token0 to collect, amount1Max The maximum amount of token1 to collect |
+| 名称   | 类型                                             | 描述                                                        |
+| ------ | ------------------------------------------------ | ----------------------------------------------------------- |
+| params | struct INonfungiblePositionManager.CollectParams | tokenId 收集代币的 NFT ID，recipient 接收代币的账户，amount0Max 收集的最大 token0 数量，amount1Max 收集的最大 token1 数量  |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                            |
-| ------- | ------- | -------------------------------------- |
-| amount0 | uint256 | The amount of fees collected in token0 |
-| amount1 | uint256 | The amount of fees collected in token1 |
+| 名称    | 类型    | 描述                          |
+| ------- | ------- | ----------------------------- |
+| amount0 | uint256 | 收集合约费用的 token0 数量    |
+| amount1 | uint256 | 收集合约费用的 token1 数量    |
 
 ### burn
 
@@ -183,13 +183,13 @@ Collects up to a maximum amount of fees owed to a specific position to the recip
 function burn(uint256 tokenId) external payable
 ```
 
-Burns a token ID, which deletes it from the NFT contract. The token must have 0 liquidity and all tokens must be collected first.
+烧毁 token ID，将其从 NFT 合约中删除。该 token 必须具有 0 流动性，并且首先必须收集所有代币。
 
-**Parameters**
+**参数**
 
-| Name    | Type    | Description                              |
-| ------- | ------- | ---------------------------------------- |
-| tokenId | uint256 | The ID of the token that is being burned |
+| 名称    | 类型    | 描述                           |
+| ------- | ------- | ------------------------------ |
+| tokenId | uint256 | 正在烧毁的 token ID            |
 
 ### \_getAndIncrementNonce
 
@@ -197,7 +197,7 @@ Burns a token ID, which deletes it from the NFT contract. The token must have 0 
 function _getAndIncrementNonce(uint256 tokenId) internal returns (uint256)
 ```
 
-_Gets the current nonce for a token ID and then increments it, returning the original value_
+_获取一个 token ID 的当前 nonce, 然后递增并返回原始值_
 
 ### getApproved
 
@@ -205,11 +205,11 @@ _Gets the current nonce for a token ID and then increments it, returning the ori
 function getApproved(uint256 tokenId) public view returns (address)
 ```
 
-\_Returns the account approved for `tokenId` token.
+_返回被批准的 `tokenId` 账户。
 
-Requirements:
+要求：
 
-* `tokenId` must exist.\_
+* `tokenId` 必须存在。_
 
 ### \_approve
 
@@ -217,4 +217,4 @@ Requirements:
 function _approve(address to, uint256 tokenId) internal
 ```
 
-\_Overrides _approve to use the operator in the position, which is packed with the position permit nonce_
+_重写 _approve 以使用位置中的操作符，其中包含位置许可 nonce_

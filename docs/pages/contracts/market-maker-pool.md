@@ -1,41 +1,35 @@
 ---
-description: Direct swap with Market Maker
+description: 直接与做市商进行交易
 ---
 
-# Market Maker Pool
+# 做市商池
 
-## Contract info
+## 合约信息
 
-**Contract name: MM Pool**
-
-
+**合约名称: MM Pool**
 
 **BSC**
 
-**Contract address:** [0xfEACb05b373f1A08E68235bA7FC92636b92ced01](https://bscscan.com/address/0xfEACb05b373f1A08E68235bA7FC92636b92ced01#code)
+**合约地址:** [0xfEACb05b373f1A08E68235bA7FC92636b92ced01](https://bscscan.com/address/0xfEACb05b373f1A08E68235bA7FC92636b92ced01#code)
 
-[View on BscScan](https://bscscan.com/address/0xfEACb05b373f1A08E68235bA7FC92636b92ced01)
-
-
+[在 BscScan 上查看](https://bscscan.com/address/0xfEACb05b373f1A08E68235bA7FC92636b92ced01)
 
 **ETH**
 
-**Contract address:** [0x9Ca2A439810524250E543BA8fB6E88578aF242BC](https://etherscan.io/address/0x9Ca2A439810524250E543BA8fB6E88578aF242BC#code)
+**合约地址:** [0x9Ca2A439810524250E543BA8fB6E88578aF242BC](https://etherscan.io/address/0x9Ca2A439810524250E543BA8fB6E88578aF242BC#code)
 
-[View on Etherscan](https://etherscan.io/address/0x9Ca2A439810524250E543BA8fB6E88578aF242BC)
+[在 Etherscan 上查看](https://etherscan.io/address/0x9Ca2A439810524250E543BA8fB6E88578aF242BC)
 
+### 交换示例
 
-
-### Example of Swapping
-
-#### EIP 712 Signature
+#### EIP 712 签名
 
 ```solidity
 const domain = {
   name: "PCS MM Pool",
   version: "1",
-  chainId: // 1 or 56,
-  verifyingContract: // please refer to the address above,
+  chainId: // 1 或 56,
+  verifyingContract: // 请参照上面的地址,
 };
 
 const quoteType = {
@@ -60,19 +54,19 @@ const quoteValue = {
     expiryTimestamp,
 };
 
-// EIP 712 Signature
+// EIP 712 签名
 const signature = await mm._signTypedData(domain, quoteType, quoteValue);
 ```
 
-| Name | Type | Description | 
+| 名称 | 类型 | 描述 | 
 | ----------- | ------- | ---------------------------------- |
-| nonce | uint256 | The user nonce can be called from `getUserNonce` in the contract |
-| user | address | user address |
-| baseToken | address | The token address that the user is sending to the market maker |
-| quoteToken | address | The token address that the user is receiving from the market maker |
-| baseTokenAmount | uint256 | The amount of base token in the swap |
-| quoteTokenAmount | uint256 | The amount of quote token in the swap |
-| expiryTimestamp | uint256 | The expiry time of the signature in unix |
+| nonce | uint256 | 用户 nonce，可以从合约中的 `getUserNonce` 调用 |
+| user | address | 用户地址 |
+| baseToken | address | 用户发送给做市商的代币地址 |
+| quoteToken | address | 用户从做市商接收的代币地址 |
+| baseTokenAmount | uint256 | 交换中基础代币的数量 |
+| quoteTokenAmount | uint256 | 交换中报价代币的数量 |
+| expiryTimestamp | uint256 | 签名的到期时间（unix 时间戳）|
 
 #### swap
 
@@ -94,8 +88,8 @@ function swap(
     ) external payable
 ```
 
-| Name        | Type    | Description                        |
-| ----------- | ------- | ---------------------------------- |
-| \_mmSigner  | address | The market maker address           |
-| \_quote     | Quote   | The Quote struct                   |
-| \_signature | bytes   | The signature generated from above |
+| 名称        | 类型    | 描述                             |
+| ----------- | ------- | -------------------------------- |
+| \_mmSigner  | address | 做市商地址                       |
+| \_quote     | Quote   | Quote 结构体                     |
+| \_signature | bytes   | 上述生成的签名                   |

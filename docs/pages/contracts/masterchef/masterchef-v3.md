@@ -2,7 +2,7 @@
 
 ## Solidity API
 
-MasterChefV3 is used to provide CAKE emission to PancakeSwapV3 pools.
+MasterChefV3 用于向 PancakeSwapV3 池提供 CAKE 发行。
 
 ### PoolInfo
 
@@ -46,7 +46,7 @@ uint256 poolLength
 mapping(uint256 => struct MasterChefV3.PoolInfo) poolInfo
 ```
 
-Info of each MCV3 pool.
+每个 MCV3 池的信息。
 
 ### userPositionInfos
 
@@ -54,9 +54,9 @@ Info of each MCV3 pool.
 mapping(uint256 => struct MasterChefV3.UserPositionInfo) userPositionInfos
 ```
 
-userPositionInfos\[tokenId] => UserPositionInfo
+userPositionInfos[tokenId] => UserPositionInfo
 
-_TokenId is unique, and we can query the pid by tokenId._
+_tokenId 是唯一的，我们可以通过 tokenId 查询 pid。_
 
 ### v3PoolPid
 
@@ -64,7 +64,7 @@ _TokenId is unique, and we can query the pid by tokenId._
 mapping(address => mapping(address => mapping(uint24 => uint256))) v3PoolPid
 ```
 
-v3PoolPid\[token0]\[token1]\[fee] => pid
+v3PoolPid[token0][token1][fee] => pid
 
 ### v3PoolAddressPid
 
@@ -72,7 +72,7 @@ v3PoolPid\[token0]\[token1]\[fee] => pid
 mapping(address => uint256) v3PoolAddressPid
 ```
 
-v3PoolAddressPid\[v3PoolAddress] => pid
+v3PoolAddressPid[v3PoolAddress] => pid
 
 ### CAKE
 
@@ -80,7 +80,7 @@ v3PoolAddressPid\[v3PoolAddress] => pid
 contract IERC20 CAKE
 ```
 
-Address of CAKE contract.
+CAKE 合约地址。
 
 ### WETH
 
@@ -88,7 +88,7 @@ Address of CAKE contract.
 address WETH
 ```
 
-Address of WETH contract.
+WETH 合约地址。
 
 ### receiver
 
@@ -96,7 +96,7 @@ Address of WETH contract.
 address receiver
 ```
 
-Address of Receiver contract.
+接收者合约地址。
 
 ### nonfungiblePositionManager
 
@@ -110,7 +110,7 @@ contract INonfungiblePositionManager nonfungiblePositionManager
 contract ILMPoolDeployer LMPoolDeployer
 ```
 
-Address of liquidity mining pool deployer contract.
+流动性挖矿池部署者合约地址。
 
 ### FARM\_BOOSTER
 
@@ -118,7 +118,7 @@ Address of liquidity mining pool deployer contract.
 contract IFarmBooster FARM_BOOSTER
 ```
 
-Address of farm booster contract.
+农场加速器合约地址。
 
 ### emergency
 
@@ -126,7 +126,7 @@ Address of farm booster contract.
 bool emergency
 ```
 
-Only use for emergency situations.
+仅用于紧急情况。
 
 ### totalAllocPoint
 
@@ -134,7 +134,7 @@ Only use for emergency situations.
 uint256 totalAllocPoint
 ```
 
-Total allocation points. Must be the sum of all pools' allocation points.
+总分配点数。必须是所有池的分配点数之和。
 
 ### latestPeriodNumber
 
@@ -166,7 +166,7 @@ uint256 latestPeriodCakePerSecond
 address operatorAddress
 ```
 
-Address of the operator.
+运营者地址。
 
 ### PERIOD\_DURATION
 
@@ -174,7 +174,7 @@ Address of the operator.
 uint256 PERIOD_DURATION
 ```
 
-Default period duration.
+默认的周期时长。
 
 ### MAX\_DURATION
 
@@ -200,7 +200,7 @@ uint256 PRECISION
 uint256 BOOST_PRECISION
 ```
 
-Basic boost factor, none boosted user's boost factor
+基本的加速因子，未加速用户的加速因子。
 
 ### MAX\_BOOST\_PRECISION
 
@@ -208,7 +208,7 @@ Basic boost factor, none boosted user's boost factor
 uint256 MAX_BOOST_PRECISION
 ```
 
-Hard limit for maximum boost factor, it must greater than BOOST\_PRECISION
+最大加速因子的硬限制，必须大于 BOOST_PRECISION。
 
 ### Q128
 
@@ -228,7 +228,7 @@ uint256 MAX_U256
 uint256 cakeAmountBelongToMC
 ```
 
-Record the cake amount belong to MasterChefV3.
+记录属于 MasterChefV3 的 CAKE 数量。
 
 ### ZeroAddress
 
@@ -434,7 +434,7 @@ modifier onlyReceiver()
 modifier onlyBoostContract()
 ```
 
-_Throws if caller is not the boost contract._
+_调用方不是加速合约时抛出。_
 
 ### constructor
 
@@ -442,13 +442,13 @@ _Throws if caller is not the boost contract._
 constructor(contract IERC20 _CAKE, contract INonfungiblePositionManager _nonfungiblePositionManager, address _WETH) public
 ```
 
-**Parameters**
+**参数**
 
-| Name                         | Type                                 | Description                                |
-| ---------------------------- | ------------------------------------ | ------------------------------------------ |
-| \_CAKE                       | contract IERC20                      | The CAKE token contract address.           |
-| \_nonfungiblePositionManager | contract INonfungiblePositionManager | the NFT position manager contract address. |
-| \_WETH                       | address                              |                                            |
+| 名称                        | 类型                                 | 描述                             |
+| --------------------------- | ------------------------------------ | -------------------------------- |
+| \_CAKE                      | contract IERC20                      | CAKE 代币合约地址                |
+| \_nonfungiblePositionManager | contract INonfungiblePositionManager | NFT 头寸管理器合约地址           |
+| \_WETH                      | address                              |                                 |
 
 ### getLatestPeriodInfoByPid
 
@@ -456,13 +456,13 @@ constructor(contract IERC20 _CAKE, contract INonfungiblePositionManager _nonfung
 function getLatestPeriodInfoByPid(uint256 _pid) public view returns (uint256 cakePerSecond, uint256 endTime)
 ```
 
-Returns the cake per second , period end time.
+返回每秒的 cake 数量，周期结束时间。
 
-**Parameters**
+**参数**
 
-| Name  | Type    | Description   |
-| ----- | ------- | ------------- |
-| \_pid | uint256 | The pool pid. |
+| 名称  | 类型    | 描述        |
+| ----- | ------- | ----------- |
+| \_pid | uint256 | 池的 pid。  |
 
 ### getLatestPeriodInfo
 
@@ -470,13 +470,13 @@ Returns the cake per second , period end time.
 function getLatestPeriodInfo(address _v3Pool) public view returns (uint256 cakePerSecond, uint256 endTime)
 ```
 
-Returns the cake per second , period end time. This is for liquidity mining pool.
+返回每秒的 cake 数量，周期结束时间。适用于流动性挖矿池。
 
-**Parameters**
+**参数**
 
-| Name     | Type    | Description             |
-| -------- | ------- | ----------------------- |
-| \_v3Pool | address | Address of the V3 pool. |
+| 名称     | 类型    | 描述               |
+| -------- | ------- | ------------------ |
+| \_v3Pool | address | V3 池的地址。      |
 
 ### pendingCake
 
@@ -484,15 +484,15 @@ Returns the cake per second , period end time. This is for liquidity mining pool
 function pendingCake(uint256 _tokenId) external view returns (uint256 reward)
 ```
 
-View function for checking pending CAKE rewards.
+查看待领取的 CAKE 奖励。
 
-_The pending cake amount is based on the last state in LMPool. The actual amount will happen whenever liquidity changes or harvest._
+_待领取的 cake 数量基于 LMPool 的最后状态。实际数量将在流动性变化或收获时发生。_
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description      |
-| --------- | ------- | ---------------- |
-| \_tokenId | uint256 | Token Id of NFT. |
+| 名称      | 类型    | 描述               |
+| --------- | ------- | ----------------- |
+| \_tokenId | uint256 | NFT 的 Token Id。 |
 
 ### setEmergency
 
@@ -500,7 +500,7 @@ _The pending cake amount is based on the last state in LMPool. The actual amount
 function setEmergency(bool _emergency) external
 ```
 
-For emergency use only.
+仅用于紧急情况。
 
 ### setReceiver
 
@@ -520,15 +520,15 @@ function setLMPoolDeployer(contract ILMPoolDeployer _LMPoolDeployer) external
 function add(uint256 _allocPoint, contract IPancakeV3Pool _v3Pool, bool _withUpdate) external
 ```
 
-Add a new pool. Can only be called by the owner. One v3 pool can only create one pool.
+添加一个新的池。仅允许所有者调用。一个 v3 池只能创建一个池。
 
-**Parameters**
+**参数**
 
-| Name         | Type                    | Description                                   |
-| ------------ | ----------------------- | --------------------------------------------- |
-| \_allocPoint | uint256                 | Number of allocation points for the new pool. |
-| \_v3Pool     | contract IPancakeV3Pool | Address of the V3 pool.                       |
-| \_withUpdate | bool                    | Whether call "massUpdatePools" operation.     |
+| 名称         | 类型                    | 描述                                   |
+| ------------ | ----------------------- | -------------------------------------- |
+| \_allocPoint | uint256                 | 新池的分配点数                         |
+| \_v3Pool     | contract IPancakeV3Pool | V3 池的地址。                          |
+| \_withUpdate | bool                    | 是否调用 “massUpdatePools” 操作。      |
 
 ### set
 
@@ -536,15 +536,15 @@ Add a new pool. Can only be called by the owner. One v3 pool can only create one
 function set(uint256 _pid, uint256 _allocPoint, bool _withUpdate) external
 ```
 
-Update the given pool's CAKE allocation point. Can only be called by the owner.
+更新指定池的 CAKE 分配点数。只能由所有者调用。
 
-**Parameters**
+**参数**
 
-| Name         | Type    | Description                                   |
-| ------------ | ------- | --------------------------------------------- |
-| \_pid        | uint256 | The id of the pool. See `poolInfo`.           |
-| \_allocPoint | uint256 | New number of allocation points for the pool. |
-| \_withUpdate | bool    | Whether call "massUpdatePools" operation.     |
+| 名称         | 类型    | 描述                                   |
+| ------------ | ------- | -------------------------------------- |
+| \_pid        | uint256 | 池的 id。见 `poolInfo`。               |
+| \_allocPoint | uint256 | 池的新分配点数                         |
+| \_withUpdate | bool    | 是否调用 “massUpdatePools” 操作。      |
 
 ### DepositCache
 
@@ -565,7 +565,7 @@ struct DepositCache {
 function onERC721Received(address, address _from, uint256 _tokenId, bytes) external returns (bytes4)
 ```
 
-Upon receiving a ERC721
+接收到 ERC721 时
 
 ### harvest
 
@@ -573,14 +573,14 @@ Upon receiving a ERC721
 function harvest(uint256 _tokenId, address _to) external returns (uint256 reward)
 ```
 
-harvest cake from pool.
+从池中收获 CAKE。
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description      |
-| --------- | ------- | ---------------- |
-| \_tokenId | uint256 | Token Id of NFT. |
-| \_to      | address | Address to.      |
+| 名称      | 类型    | 描述               |
+| --------- | ------- | ----------------- |
+| \_tokenId | uint256 | NFT 的 Token Id。 |
+| \_to      | address | 接收地址。         |
 
 ### harvestOperation
 
@@ -594,14 +594,14 @@ function harvestOperation(struct MasterChefV3.UserPositionInfo positionInfo, uin
 function withdraw(uint256 _tokenId, address _to) external returns (uint256 reward)
 ```
 
-Withdraw LP tokens from pool.
+从池中提取 LP 代币。
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description                             |
-| --------- | ------- | --------------------------------------- |
-| \_tokenId | uint256 | Token Id of NFT to deposit.             |
-| \_to      | address | Address to which NFT token to withdraw. |
+| 名称      | 类型    | 描述                              |
+| --------- | ------- | -------------------------------- |
+| \_tokenId | uint256 | 要存入的 NFT 的 Token Id。      |
+| \_to      | address | 提取 NFT 代币的接收地址。         |
 
 ### updateLiquidity
 
@@ -609,13 +609,13 @@ Withdraw LP tokens from pool.
 function updateLiquidity(uint256 _tokenId) external
 ```
 
-Update liquidity for the NFT position.
+更新 NFT 头寸的流动性。
 
-**Parameters**
+**参数**
 
-| Name      | Type    | Description                |
-| --------- | ------- | -------------------------- |
-| \_tokenId | uint256 | Token Id of NFT to update. |
+| 名称      | 类型    | 描述                         |
+| --------- | ------- | --------------------------- |
+| \_tokenId | uint256 | 要更新的 NFT 的 Token Id。 |
 
 ### updateBoostMultiplier
 
@@ -623,14 +623,14 @@ Update liquidity for the NFT position.
 function updateBoostMultiplier(uint256 _tokenId, uint256 _newMultiplier) external
 ```
 
-Update farm boost multiplier for the NFT position.
+更新 NFT 头寸的农场加速倍数。
 
-**Parameters**
+**参数**
 
-| Name            | Type    | Description                |
-| --------------- | ------- | -------------------------- |
-| \_tokenId       | uint256 | Token Id of NFT to update. |
-| \_newMultiplier | uint256 | New boost multiplier.      |
+| 名称            | 类型    | 描述                         |
+| --------------- | ------- | ---------------------------- |
+| \_tokenId       | uint256 | 要更新的 NFT 的 Token Id。  |
+| \_newMultiplier | uint256 | 新的加速倍数。               |
 
 ### updateLiquidityOperation
 
@@ -644,21 +644,21 @@ function updateLiquidityOperation(struct MasterChefV3.UserPositionInfo positionI
 function increaseLiquidity(struct INonfungiblePositionManagerStruct.IncreaseLiquidityParams params) external payable returns (uint128 liquidity, uint256 amount0, uint256 amount1)
 ```
 
-Increases the amount of liquidity in a position, with tokens paid by the `msg.sender`
+增加头寸中的流动性，代币由 `msg.sender` 支付。
 
-**Parameters**
+**参数**
 
-| Name   | Type                                                             | Description                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| ------ | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManagerStruct.IncreaseLiquidityParams | tokenId The ID of the token for which liquidity is being increased, amount0Desired The desired amount of token0 to be spent, amount1Desired The desired amount of token1 to be spent, amount0Min The minimum amount of token0 to spend, which serves as a slippage check, amount1Min The minimum amount of token1 to spend, which serves as a slippage check, deadline The time by which the transaction must be included to effect the change |
+| 名称   | 类型                                                             | 描述                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ------ | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| params | struct INonfungiblePositionManagerStruct.IncreaseLiquidityParams | tokenId 液增加流动性的 Token 的 ID，amount0Desired 花费的 token0 的期望数量，amount1Desired 花费的 token1 的期望数量，amount0Min 花费的 token0 的最小数量，作为滑点检查，amount1Min 花费的 token1 的最小数量，作为滑点检查，deadline 交易必须包含以生效的时间截止日期 |
 
-**Return Values**
+**返回值**
 
-| Name      | Type    | Description                                          |
-| --------- | ------- | ---------------------------------------------------- |
-| liquidity | uint128 | The new liquidity amount as a result of the increase |
-| amount0   | uint256 | The amount of token0 to achieve resulting liquidity  |
-| amount1   | uint256 | The amount of token1 to achieve resulting liquidity  |
+| 名称      | 类型    | 描述                                          |
+| --------- | ------- | --------------------------------------------- |
+| liquidity | uint128 | 增加后的流动性数量                           |
+| amount0   | uint256 | 获取增加后的流动性所需的 token0 数量        |
+| amount1   | uint256 | 获取增加后的流动性所需的 token1 数量        |
 
 ### pay
 
@@ -666,14 +666,14 @@ Increases the amount of liquidity in a position, with tokens paid by the `msg.se
 function pay(address _token, uint256 _amount) internal
 ```
 
-Pay.
+支付。
 
-**Parameters**
+**参数**
 
-| Name     | Type    | Description       |
-| -------- | ------- | ----------------- |
-| \_token  | address | The token to pay  |
-| \_amount | uint256 | The amount to pay |
+| 名称     | 类型    | 描述                |
+| -------- | ------- | ------------------ |
+| \_token  | address | 要支付的代币        |
+| \_amount | uint256 | 要支付的数量        |
 
 ### refund
 
@@ -681,14 +681,14 @@ Pay.
 function refund(address _token, uint256 _amount) internal
 ```
 
-Refund.
+退款。
 
-**Parameters**
+**参数**
 
-| Name     | Type    | Description          |
-| -------- | ------- | -------------------- |
-| \_token  | address | The token to refund  |
-| \_amount | uint256 | The amount to refund |
+| 名称     | 类型    | 描述                |
+| -------- | ------- | ------------------ |
+| \_token  | address | 要退款的代币        |
+| \_amount | uint256 | 要退款的数量        |
 
 ### decreaseLiquidity
 
@@ -696,20 +696,20 @@ Refund.
 function decreaseLiquidity(struct INonfungiblePositionManagerStruct.DecreaseLiquidityParams params) external returns (uint256 amount0, uint256 amount1)
 ```
 
-Decreases the amount of liquidity in a position and accounts it to the position
+减少头寸中的流动性，并将其计入该头寸。
 
-**Parameters**
+**参数**
 
-| Name   | Type                                                             | Description                                                                                                                                                                                                                                                                                                                                                                                        |
-| ------ | ---------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManagerStruct.DecreaseLiquidityParams | tokenId The ID of the token for which liquidity is being decreased, amount The amount by which liquidity will be decreased, amount0Min The minimum amount of token0 that should be accounted for the burned liquidity, amount1Min The minimum amount of token1 that should be accounted for the burned liquidity, deadline The time by which the transaction must be included to effect the change |
+| 名称   | 类型                                                             | 描述                                                                                                                                                                                                                                                                                                                                                         |
+| ------ | ---------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| params | struct INonfungiblePositionManagerStruct.DecreaseLiquidityParams | tokenId 流动性减少的 Token 的 ID，amount 将减少的流动性数量，amount0Min 为烧毁的流动性账户最小数量的 token0，amount1Min 为烧毁的流动性账户最小数量的 token1，deadline 交易必须包含以生效的时间截止日期。 |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                                                  |
-| ------- | ------- | ------------------------------------------------------------ |
-| amount0 | uint256 | The amount of token0 accounted to the position's tokens owed |
-| amount1 | uint256 | The amount of token1 accounted to the position's tokens owed |
+| 名称    | 类型    | 描述                                                   |
+| ------- | ------- | ------------------------------------------------------ |
+| amount0 | uint256 | 计入该头寸应得的 token0 数量                           |
+| amount1 | uint256 | 计入该头寸应得的 token1 数量                           |
 
 ### collect
 
@@ -717,22 +717,22 @@ Decreases the amount of liquidity in a position and accounts it to the position
 function collect(struct INonfungiblePositionManagerStruct.CollectParams params) external returns (uint256 amount0, uint256 amount1)
 ```
 
-Collects up to a maximum amount of fees owed to a specific position to the recipient
+收集指定头寸中最多的费用到接收者。
 
-_Warning!!! Please make sure to use multicall to call unwrapWETH9 or sweepToken when set recipient address(0), or you will lose your funds. amount0Max The maximum amount of token0 to collect, amount1Max The maximum amount of token1 to collect_
+_警告!!! 请确保在设置接收者地址为(0)时使用 multicall 调用 unwrapWETH9 或 sweepToken，否则你将丢失资金。amount0Max 收集的 token0 的最大数量，amount1Max 收集的 token1 的最大数量_
 
-**Parameters**
+**参数**
 
-| Name   | Type                                                   | Description                                                                                                           |
-| ------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
-| params | struct INonfungiblePositionManagerStruct.CollectParams | tokenId The ID of the NFT for which tokens are being collected, recipient The account that should receive the tokens, |
+| 名称   | 类型                                                   | 描述                                                                                                                                                                            |
+| ------ | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
+| params | struct INonfungiblePositionManagerStruct.CollectParams | tokenId 正在收集的 NFT 的 ID，recipient 应接收代币的账户 |
 
-**Return Values**
+**返回值**
 
-| Name    | Type    | Description                            |
-| ------- | ------- | -------------------------------------- |
-| amount0 | uint256 | The amount of fees collected in token0 |
-| amount1 | uint256 | The amount of fees collected in token1 |
+| 名称    | 类型    | 描述                            |
+| ------- | ------- | ------------------------------- |
+| amount0 | uint256 | 收集的 token0 的费用数量        |
+| amount1 | uint256 | 收集的 token1 的费用数量        |
 
 ### collectTo
 
@@ -740,7 +740,7 @@ _Warning!!! Please make sure to use multicall to call unwrapWETH9 or sweepToken 
 function collectTo(struct INonfungiblePositionManagerStruct.CollectParams params, address to) external returns (uint256 amount0, uint256 amount1)
 ```
 
-Collect fees and refund.
+收集费用和退款。
 
 ### transferToken
 
@@ -748,14 +748,14 @@ Collect fees and refund.
 function transferToken(address _token, address _to) internal
 ```
 
-Transfer token from MasterChef V3.
+从 MasterChef V3 转移 token。
 
-**Parameters**
+**参数**
 
-| Name    | Type    | Description            |
-| ------- | ------- | ---------------------- |
-| \_token | address | The token to transfer. |
-| \_to    | address | The to address.        |
+| 名称    | 类型    | 描述                           |
+| ------- | ------- | ---------------------------- |
+| \_token | address | 要转移的代币。               |
+| \_to    | address | 接收地址。                         |
 
 ### unwrapWETH9
 
@@ -763,161 +763,18 @@ Transfer token from MasterChef V3.
 function unwrapWETH9(uint256 amountMinimum, address recipient) external
 ```
 
-Unwraps the contract's WETH9 balance and sends it to recipient as ETH.
+将合约中的 WETH9 解包并作为 ETH 发送给接收者。
 
-_The amountMinimum parameter prevents malicious contracts from stealing WETH9 from users._
+_amountMinimum 参数防止恶意合约窃取用户的 WETH9。_
 
-**Parameters**
+**参数**
 
-| Name          | Type    | Description                           |
-| ------------- | ------- | ------------------------------------- |
-| amountMinimum | uint256 | The minimum amount of WETH9 to unwrap |
-| recipient     | address | The address receiving ETH             |
+| 名称          | 类型    | 描述                                   |
+| ------------- | ------- | -------------------------------------- |
+| amountMinimum | uint256 | 要解包的 WETH9 最小数量                |
+| recipient     | address | 接收 ETH 的地址                        |
 
 ### sweepToken
 
 ```solidity
 function sweepToken(address token, uint256 amountMinimum, address recipient) external
-```
-
-Transfers the full amount of a token held by this contract to recipient
-
-_The amountMinimum parameter prevents malicious contracts from stealing the token from users_
-
-**Parameters**
-
-| Name          | Type    | Description                                                                |
-| ------------- | ------- | -------------------------------------------------------------------------- |
-| token         | address | The contract address of the token which will be transferred to `recipient` |
-| amountMinimum | uint256 | The minimum amount of token required for a transfer                        |
-| recipient     | address | The destination address of the token                                       |
-
-### burn
-
-```solidity
-function burn(uint256 _tokenId) external
-```
-
-Burns a token ID, which deletes it from the NFT contract. The token must have 0 liquidity and all tokens must be collected first.
-
-**Parameters**
-
-| Name      | Type    | Description                              |
-| --------- | ------- | ---------------------------------------- |
-| \_tokenId | uint256 | The ID of the token that is being burned |
-
-### upkeep
-
-```solidity
-function upkeep(uint256 _amount, uint256 _duration, bool _withUpdate) external
-```
-
-Upkeep period.
-
-**Parameters**
-
-| Name         | Type    | Description                               |
-| ------------ | ------- | ----------------------------------------- |
-| \_amount     | uint256 | The amount of cake injected.              |
-| \_duration   | uint256 | The period duration.                      |
-| \_withUpdate | bool    | Whether call "massUpdatePools" operation. |
-
-### massUpdatePools
-
-```solidity
-function massUpdatePools() internal
-```
-
-Update cake reward for all the liquidity mining pool.
-
-### updatePools
-
-```solidity
-function updatePools(uint256[] pids) external
-```
-
-Update cake reward for the liquidity mining pool.
-
-_Avoid too many pools, and a single transaction cannot be fully executed for all pools._
-
-### setOperator
-
-```solidity
-function setOperator(address _operatorAddress) external
-```
-
-Set operator address.
-
-_Callable by owner_
-
-**Parameters**
-
-| Name              | Type    | Description           |
-| ----------------- | ------- | --------------------- |
-| \_operatorAddress | address | New operator address. |
-
-### setPeriodDuration
-
-```solidity
-function setPeriodDuration(uint256 _periodDuration) external
-```
-
-Set period duration.
-
-_Callable by owner_
-
-**Parameters**
-
-| Name             | Type    | Description          |
-| ---------------- | ------- | -------------------- |
-| \_periodDuration | uint256 | New period duration. |
-
-### updateFarmBoostContract
-
-```solidity
-function updateFarmBoostContract(address _newFarmBoostContract) external
-```
-
-Update farm boost contract address.
-
-**Parameters**
-
-| Name                   | Type    | Description                   |
-| ---------------------- | ------- | ----------------------------- |
-| \_newFarmBoostContract | address | The new farm booster address. |
-
-### safeTransferETH
-
-```solidity
-function safeTransferETH(address to, uint256 value) internal
-```
-
-Transfer ETH in a safe way
-
-**Parameters**
-
-| Name  | Type    | Description |
-| ----- | ------- | ----------- |
-| to    | address |             |
-| value | uint256 |             |
-
-### \_safeTransfer
-
-```solidity
-function _safeTransfer(address _to, uint256 _amount) internal
-```
-
-Safe Transfer CAKE.
-
-**Parameters**
-
-| Name     | Type    | Description                |
-| -------- | ------- | -------------------------- |
-| \_to     | address | The CAKE receiver address. |
-| \_amount | uint256 | Transfer CAKE amounts.     |
-
-### receive
-
-```solidity
-receive() external payable
-```
