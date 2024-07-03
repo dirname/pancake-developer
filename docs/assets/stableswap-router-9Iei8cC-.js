@@ -1,0 +1,4 @@
+import{u as s,j as e}from"./index-phq109e0.js";const c={title:"Smart Router",description:"undefined"};function t(r){const n={a:"a",br:"br",div:"div",h1:"h1",header:"header",p:"p",strong:"strong",...s(),...r.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.header,{children:e.jsxs(n.h1,{id:"smart-router",children:["Smart Router",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#smart-router",children:e.jsx(n.div,{"data-autolink-icon":!0})})]})}),`
+`,e.jsxs(n.p,{children:[e.jsx(n.strong,{children:"Binance smart chain"}),e.jsx(n.br,{}),`
+`,"合约地址 ",e.jsx(n.strong,{children:":"})," 0xC6665d98Efd81f47B03801187eB46cbC63F328B0",e.jsx(n.br,{}),`
+`,"在 ",e.jsx(n.a,{href:"https://bscscan.com/address/0xc6665d98efd81f47b03801187eb46cbc63f328b0",children:"BscScan 上查看 PancakeSwap: Smart Router 合约"})]})]})}function d(r={}){const{wrapper:n}={...s(),...r.components};return n?e.jsx(n,{...r,children:e.jsx(t,{...r})}):t(r)}export{d as default,c as frontmatter};

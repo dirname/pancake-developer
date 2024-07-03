@@ -1,0 +1,8 @@
+import{u as c,j as e}from"./index-phq109e0.js";const t={description:"Curve Finance 的分叉",title:"稳定交换"};function d(a){const n={a:"a",code:"code",div:"div",h1:"h1",h2:"h2",h3:"h3",header:"header",p:"p",...c(),...a.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.header,{children:e.jsxs(n.h1,{id:"稳定交换",children:["稳定交换",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#稳定交换",children:e.jsx(n.div,{"data-autolink-icon":!0})})]})}),`
+`,e.jsxs(n.h2,{id:"合约信息",children:["合约信息",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#合约信息",children:e.jsx(n.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsxs(n.h3,{id:"binance-智能链",children:["Binance 智能链",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#binance-智能链",children:e.jsx(n.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsxs(n.p,{children:["Stableswap Factory 合约地址: ",e.jsx(n.code,{children:"0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2"})]}),`
+`,e.jsxs(n.p,{children:["查看 ",e.jsx(n.a,{href:"https://bscscan.com/address/0x36bBb126e75351C0DfB651e39b38fe0BC436FFD2",children:"PancakeSwap: Stableswap Factory 合约在 BscScan 上"})]}),`
+`,e.jsxs(n.h3,{id:"智能路由",children:["智能路由",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#智能路由",children:e.jsx(n.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsxs(n.p,{children:["合约地址: ",e.jsx(n.code,{children:"0xC6665d98Efd81f47B03801187eB46cbC63F328B0"})]}),`
+`,e.jsxs(n.p,{children:["查看 ",e.jsx(n.a,{href:"https://bscscan.com/address/0xc6665d98efd81f47b03801187eb46cbc63f328b0",children:"PancakeSwap: Smart Router 合约在 BscScan 上"})]})]})}function s(a={}){const{wrapper:n}={...c(),...a.components};return n?e.jsx(n,{...a,children:e.jsx(d,{...a})}):d(a)}export{s as default,t as frontmatter};

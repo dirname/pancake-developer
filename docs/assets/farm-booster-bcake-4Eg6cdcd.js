@@ -1,0 +1,13 @@
+import{u as n,j as e}from"./index-phq109e0.js";const d={title:"Farm Booster (bCAKE)",description:"undefined"};function s(a){const r={a:"a",br:"br",div:"div",h1:"h1",h2:"h2",h4:"h4",header:"header",p:"p",strong:"strong",...n(),...a.components};return e.jsxs(e.Fragment,{children:[e.jsx(r.header,{children:e.jsxs(r.h1,{id:"farm-booster-bcake",children:["Farm Booster (bCAKE)",e.jsx(r.a,{"aria-hidden":"true",tabIndex:"-1",href:"#farm-booster-bcake",children:e.jsx(r.div,{"data-autolink-icon":!0})})]})}),`
+`,e.jsxs(r.h2,{id:"合约信息",children:["合约信息",e.jsx(r.a,{"aria-hidden":"true",tabIndex:"-1",href:"#合约信息",children:e.jsx(r.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsxs(r.h4,{id:"bcake-farm-booster-合约",children:[e.jsx(r.strong,{children:"bCAKE Farm Booster 合约"}),e.jsx(r.a,{"aria-hidden":"true",tabIndex:"-1",href:"#bcake-farm-booster-合约",children:e.jsx(r.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsxs(r.p,{children:[e.jsx(r.strong,{children:"合约名称:"})," FarmBooster",e.jsx(r.br,{}),`
+`,e.jsx(r.strong,{children:"合约地址:"})," ",e.jsx(r.a,{href:"https://bscscan.com/address/0xe4faa3ef5a9708c894435b0f39c2b440936a3a52",children:"0xE4FAa3Ef5A9708C894435B0F39c2B440936A3A52"})]}),`
+`,e.jsx(r.p,{children:e.jsx(r.a,{href:"https://bscscan.com/address/0xe4faa3ef5a9708c894435b0f39c2b440936a3a52",children:"在 BscScan 上查看"})}),`
+`,e.jsxs(r.h4,{id:"bcake-farm-booster-proxy-factory-合约",children:[e.jsx(r.strong,{children:"bCAKE Farm Booster Proxy Factory 合约"}),e.jsx(r.a,{"aria-hidden":"true",tabIndex:"-1",href:"#bcake-farm-booster-proxy-factory-合约",children:e.jsx(r.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsx(r.p,{children:"这个工厂合约帮助用户部署代理来使用 bCAKE 提升倍数进行挖矿。"}),`
+`,e.jsxs(r.p,{children:[e.jsx(r.strong,{children:"合约名称:"})," FarmBoosterProxyFactory",e.jsx(r.br,{}),`
+`,e.jsx(r.strong,{children:"合约地址:"})," ",e.jsx(r.a,{href:"https://bscscan.com/address/0x2c36221bf724c60e9fee3dd44e2da8017a8ef3ba",children:"0x2C36221bF724c60E9FEE3dd44e2da8017a8EF3BA"})]}),`
+`,e.jsx(r.p,{children:e.jsx(r.a,{href:"https://bscscan.com/address/0x2c36221bf724c60e9fee3dd44e2da8017a8ef3ba",children:"在 BscScan 上查看"})}),`
+`,e.jsxs(r.h2,{id:"审计",children:["审计",e.jsx(r.a,{"aria-hidden":"true",tabIndex:"-1",href:"#审计",children:e.jsx(r.div,{"data-autolink-icon":!0})})]}),`
+`,e.jsx(r.p,{children:e.jsx(r.a,{href:"https://github.com/peckshield/publications/tree/master/audit_reports/PeckShield-Audit-Report-PancakeSwap-FarmBooster-v1.0.pdf",children:"Peckshield 的 Farm Booster 安全审计"})})]})}function c(a={}){const{wrapper:r}={...n(),...a.components};return r?e.jsx(r,{...a,children:e.jsx(s,{...a})}):s(a)}export{c as default,d as frontmatter};

@@ -1,0 +1,3 @@
+import{u as a,j as e}from"./index-phq109e0.js";const i={description:"Uniswap v2 的分叉",title:"v2 合约"};function r(t){const n={a:"a",div:"div",h1:"h1",header:"header",p:"p",...a(),...t.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.header,{children:e.jsxs(n.h1,{id:"v2-合约",children:["v2 合约",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#v2-合约",children:e.jsx(n.div,{"data-autolink-icon":!0})})]})}),`
+`,e.jsx(n.p,{children:e.jsx(n.a,{href:"factory-v2",children:"factory-v2.md"})}),`
+`,e.jsx(n.p,{children:e.jsx(n.a,{href:"router-v2",children:"router-v2.md"})})]})}function o(t={}){const{wrapper:n}={...a(),...t.components};return n?e.jsx(n,{...t,children:e.jsx(r,{...t})}):r(t)}export{o as default,i as frontmatter};

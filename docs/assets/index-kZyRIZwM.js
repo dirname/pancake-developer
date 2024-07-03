@@ -1,0 +1,3 @@
+import{u as r,j as e}from"./index-phq109e0.js";const c={title:"PancakeSwap 交易所",description:"undefined"};function t(a){const n={a:"a",div:"div",h1:"h1",header:"header",p:"p",...r(),...a.components};return e.jsxs(e.Fragment,{children:[e.jsx(n.header,{children:e.jsxs(n.h1,{id:"pancakeswap-交易所",children:["PancakeSwap 交易所",e.jsx(n.a,{"aria-hidden":"true",tabIndex:"-1",href:"#pancakeswap-交易所",children:e.jsx(n.div,{"data-autolink-icon":!0})})]})}),`
+`,e.jsx(n.p,{children:e.jsx(n.a,{href:"v2/",children:"v2-contracts"})}),`
+`,e.jsx(n.p,{children:e.jsx(n.a,{href:"stableswap/",children:"stableswap"})})]})}function d(a={}){const{wrapper:n}={...r(),...a.components};return n?e.jsx(n,{...a,children:e.jsx(t,{...a})}):t(a)}export{d as default,c as frontmatter};
